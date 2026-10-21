@@ -147,10 +147,134 @@ input[type=date]{font-size:16px;background:var(--fill);border:0;outline:0;border
 .dn b{display:block;font-size:26px;font-weight:800}.dn small{font-size:12px;color:var(--sub)}
 .dayi.past{opacity:.55}.dayi.past .dn{color:var(--sub)}
 .dy.imp .n{box-shadow:inset 0 0 0 2px #ff9500}
-@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+/* ===== iOS 風格強化：更圓角、觸碰動態、手機觸控尺寸 ===== */
+:root{--sp:cubic-bezier(.34,1.56,.64,1);--ios:cubic-bezier(.32,.72,0,1);--r-card:28px;--r-fld:22px}
+body{-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+h1{font-weight:700;letter-spacing:.37px}
+.wrap{padding:6px 16px 132px}
+.sec{margin:26px 10px 10px;font-size:14px}
+.card{border-radius:var(--r-card)}
+.fld{border-radius:var(--r-fld)}
+::placeholder{color:var(--sub);opacity:.7}
+
+/* 通用觸碰回饋（彈簧回彈） */
+button{transition:transform .4s var(--sp),background-color .2s,opacity .2s,color .2s}
+button:active{transform:scale(.94);transition-duration:.12s}
+button:focus-visible,.chip input:focus-visible+span{outline:2px solid var(--acc);outline-offset:2px}
+.dy:active,.acts button:active,.al .bt button:active,.up:active{transform:none}
+.acts button:active,.al .bt button:active,.up:active{background:var(--fill)}
+.sh button:active,.lk:active{opacity:.45;transform:none}
+.thumb:active{opacity:.85;transform:none}
+
+/* 頂部 */
+.gear{width:44px;height:44px;border-radius:50%}
+.gear:active{transform:scale(.9) rotate(28deg)}
+
+/* 課程表 */
+.up{padding:18px 20px;min-height:84px}
+.up .ico{width:52px;height:52px;border-radius:17px}
+.thumb em{padding:7px 13px}
+.acts button{min-height:52px;font-weight:500}
+
+/* 月曆 */
+.cal{padding:14px 12px 12px}
+.mh{padding:2px 6px 10px}
+.mh b{font-size:20px;font-weight:700}
+.mh div{align-items:center;gap:2px}
+.nv{width:40px;height:40px}
+.td{padding:7px 14px;border-radius:99px;margin-right:4px;font-weight:500}
+.td:active{background:var(--fill)}
+.g{row-gap:4px}
+.dy{height:54px;padding-top:3px}
+.dy .n{width:38px;height:38px;font-size:18px;transition:background-color .25s,color .25s,transform .45s var(--sp),box-shadow .25s}
+.dy:active .n{transform:scale(.84)}
+.dy.pop .n{animation:pop .5s var(--sp)}
+
+/* 分段控制：滑動指示塊 */
+.seg{position:relative;border-radius:16px;padding:3px;margin-bottom:12px}
+.seg::before{content:"";position:absolute;top:3px;bottom:3px;left:3px;width:calc((100% - 8px)/3);border-radius:13px;background:var(--card);box-shadow:0 3px 10px rgba(0,0,0,.14),0 0 0 .5px rgba(0,0,0,.04);transform:translateX(calc(var(--i,0)*100%));transition:transform .5s var(--sp)}
+.seg button{position:relative;z-index:1;padding:8px 0;border-radius:13px;font-size:14px}
+.seg button.on{background:transparent;box-shadow:none}
+
+/* 事項清單 */
+.item{gap:14px;padding:15px 16px;min-height:60px}
+.item+.item:before{left:58px}
+.ck{position:relative;width:28px;height:28px;margin-top:0;transition:background-color .25s,transform .4s var(--sp)}
+.ck::after{content:"";position:absolute;inset:-9px}
+.ck svg{transition:opacity .2s}
+.item.pop .ck{animation:pop .5s var(--sp)}
+.item.pop.done .ck svg path{stroke-dasharray:24;stroke-dashoffset:24;animation:draw .38s .06s ease-out forwards}
+.t{transition:color .25s}
+.del{width:40px;height:40px;margin:-8px -8px -8px 0;display:grid;place-items:center;border-radius:50%}
+.del:active{background:var(--fill)}
+.empty{padding:36px 20px;font-size:15px}
+.dayi{gap:14px;padding:15px 16px;min-height:64px}
+.dayi+.dayi:before{left:16px}
+
+/* 新增按鈕 */
+.fab{height:56px;padding:0 24px;border-radius:99px;font-size:16px;transition:transform .4s var(--sp)}
+.fab:active{transform:scale(.92)}
+
+/* 底部面板（iOS Sheet） */
+.sheet{border-radius:34px 34px 0 0;padding:4px 16px calc(22px + env(safe-area-inset-bottom,0px));transition:transform .55s var(--ios);max-height:92vh;max-height:calc(100dvh - 20px - env(safe-area-inset-top,0px));overscroll-behavior:contain;-webkit-overflow-scrolling:touch;will-change:transform}
+.sh{position:relative;padding:22px 0 12px;touch-action:none}
+.sh::before{content:"";position:absolute;top:6px;left:50%;width:40px;height:5px;margin-left:-20px;border-radius:3px;background:var(--sub);opacity:.35}
+.sh button{min-width:44px;min-height:40px;padding:6px 4px}
+.fr{padding:12px 16px;min-height:52px}
+input[type=time],input[type=date]{border-radius:12px;padding:8px 12px;min-height:38px}
+textarea{height:76px;line-height:1.4}
+.chips{gap:10px;padding:14px 16px}
+.chip span{padding:9px 15px;font-size:15px;transition:background-color .25s,color .25s,transform .4s var(--sp)}
+.chip:active span{transform:scale(.93)}
+.chip input:checked+span{transform:none}
+@supports selector(:has(*)){
+  .pseg{position:relative;border-radius:14px;padding:3px;width:230px}
+  .pseg::before{content:"";position:absolute;top:3px;bottom:3px;left:3px;width:calc((100% - 6px)/4);border-radius:11px;background:var(--card);box-shadow:0 3px 10px rgba(0,0,0,.14);transform:translateX(calc(var(--pi,0)*100%));transition:transform .5s var(--sp)}
+  .pseg label{z-index:1}
+  .pseg span{padding:7px 0;border-radius:11px}
+  .pseg input:checked+span{background:transparent;box-shadow:none}
+  .pseg:has(label:nth-child(2) input:checked){--pi:1}
+  .pseg:has(label:nth-child(3) input:checked){--pi:2}
+  .pseg:has(label:nth-child(4) input:checked){--pi:3}
+}
+
+/* 設定頁 */
+.bgs{gap:10px;padding:14px}
+.bgs button{border-radius:20px;transition:border-color .25s,transform .4s var(--sp)}
+.bgs i{height:60px;border-radius:14px}
+.gl input[type=range]{-webkit-appearance:none;appearance:none;height:30px;background:transparent;margin:0}
+.gl input[type=range]::-webkit-slider-runnable-track{height:6px;border-radius:3px;background:linear-gradient(var(--acc),var(--acc)) 0/var(--p,50%) 100% no-repeat,var(--fill)}
+.gl input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:28px;height:28px;margin-top:-11px;border-radius:50%;background:#fff;border:.5px solid rgba(0,0,0,.08);box-shadow:0 2px 8px rgba(0,0,0,.28);transition:transform .3s var(--sp)}
+.gl input[type=range]:active::-webkit-slider-thumb{transform:scale(1.15)}
+.gl input[type=range]::-moz-range-track{height:6px;border-radius:3px;background:var(--fill)}
+.gl input[type=range]::-moz-range-progress{height:6px;border-radius:3px;background:var(--acc)}
+.gl input[type=range]::-moz-range-thumb{width:28px;height:28px;border-radius:50%;background:#fff;border:.5px solid rgba(0,0,0,.08);box-shadow:0 2px 8px rgba(0,0,0,.28)}
+
+/* 提示框、Toast、全螢幕查看 */
+.ov{transition:opacity .35s ease}
+.al.on{animation:fade .25s ease}
+.al.on .bx{animation:bx .45s var(--sp)}
+.al .bx{border-radius:28px;max-width:300px}
+.al h3{padding:22px 18px 6px}
+.al p{padding:0 18px 20px}
+.al .bt button{min-height:52px}
+.toast{padding:12px 20px;transition:transform .55s var(--sp)}
+.modal.on{animation:fade .3s ease}
+.vbtn{min-width:48px;height:48px;border-radius:24px}
+
+#bgp{position:fixed;inset:0;z-index:-1;display:none;background:center/cover no-repeat;box-shadow:inset 0 0 0 100vmax rgba(0,0,0,.1);pointer-events:none}
+:root[data-bg="photo"] #bgp{display:block}
+:root[data-bg="photo"] body::before{display:none}
+.seg,.g{touch-action:pan-y}
+@keyframes pop{0%{transform:scale(.5)}60%{transform:scale(1.18)}100%{transform:scale(1)}}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes bx{from{opacity:0;transform:scale(.86)}to{opacity:1;transform:none}}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation-duration:.01ms!important;animation-iteration-count:1!important}}
 </style>
 </head>
 <body>
+<div id="bgp"></div>
 <div class="wrap">
   <div class="hd"><h1 id="date"></h1><button class="gear" id="gear" aria-label="設定"><svg class="i" data-i="gear"></svg></button></div>
   <p class="sub" id="week"></p>
@@ -286,6 +410,8 @@ var tasks=[];try{tasks=JSON.parse(localStorage.getItem('planner-tasks')||'[]')}c
 function save(){try{localStorage.setItem('planner-tasks',JSON.stringify(tasks))}catch(e){toast('無法儲存資料')}}
 function tg(id){return TAGS.filter(function(x){return x.id===id})[0]||TAGS[0]}
 var now=new Date(),sel=dk(now),cy=now.getFullYear(),cm=now.getMonth(),filter='all';
+var popId=null,popK=null,navDir=0,animList=false;
+function mo(){return !(window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').matches)}
 
 /* 月曆 */
 function drawCal(){
@@ -298,11 +424,13 @@ function drawCal(){
     var k=cy+'-'+two(cm+1)+'-'+two(d),a=(by[k]||[]).filter(function(t){return!t.done}),seen=[],dots='';
     a.forEach(function(t){if(seen.indexOf(t.tag)<0&&seen.length<3){seen.push(t.tag);dots+='<i style="--c:'+tg(t.tag).c+'"></i>'}});
     if(!a.length&&(by[k]||[]).length)dots='<i style="--c:var(--sub);opacity:.4"></i>';
-    h+='<button class="dy'+((first+d-1)%7===0?' sun':'')+(k===today?' now':'')+(k===sel?' sel':'')+(impSet[k]?' imp':'')+'" data-k="'+k+'"><span class="n">'+d+'</span><span class="dots">'+dots+'</span></button>'}
-  $('grid').innerHTML=h}
-$('grid').onclick=function(e){var b=e.target.closest('.dy[data-k]');if(!b)return;sel=b.dataset.k;render()};
-$('prev').onclick=function(){cm--;if(cm<0){cm=11;cy--}drawCal()};
-$('next').onclick=function(){cm++;if(cm>11){cm=0;cy++}drawCal()};
+    h+='<button class="dy'+((first+d-1)%7===0?' sun':'')+(k===today?' now':'')+(k===sel?' sel':'')+(k===sel&&k===popK?' pop':'')+(impSet[k]?' imp':'')+'" data-k="'+k+'"><span class="n">'+d+'</span><span class="dots">'+dots+'</span></button>'}
+  $('grid').innerHTML=h;popK=null;
+  if(navDir&&mo()&&$('grid').animate)$('grid').animate([{opacity:0,transform:'translateX('+(navDir*28)+'px)'},{opacity:1,transform:'none'}],{duration:340,easing:'cubic-bezier(.2,.8,.2,1)'});
+  navDir=0}
+$('grid').onclick=function(e){var b=e.target.closest('.dy[data-k]');if(!b)return;sel=b.dataset.k;popK=sel;animList=true;render()};
+$('prev').onclick=function(){cm--;if(cm<0){cm=11;cy--}navDir=-1;drawCal()};
+$('next').onclick=function(){cm++;if(cm>11){cm=0;cy++}navDir=1;drawCal()};
 $('today').onclick=function(){var n=new Date();cy=n.getFullYear();cm=n.getMonth();sel=dk(n);render()};
 
 /* 當天清單 */
@@ -314,11 +442,13 @@ function render(){
   var l=all.filter(function(t){return filter==='all'||(filter==='done')===t.done});
   if(!l.length)$('list').innerHTML='<div class="empty">'+(all.length?'沒有符合的事項':'這天沒有事項，按「新增事項」記錄吧')+'</div>';
   else $('list').innerHTML=l.map(function(t){var g=tg(t.tag);
-    return '<div class="item'+(t.done?' done':'')+'" style="--c:'+g.c+'"><button class="ck" data-a="t" data-id="'+t.id+'" aria-label="切換完成狀態">'+ic('ck')+'</button><div class="bd"><div class="t">'+esc(t.title)+'</div><div class="m"><span>'+t.when.slice(11,16)+'</span><span class="tg">'+g.n+'</span>'+(t.p==='h'?'<span class="hi">高優先</span>':t.p==='m'?'<span>中優先</span>':t.p==='l'?'<span>低優先</span>':'')+'</div>'+(t.note?'<div class="nt">'+esc(t.note)+'</div>':'')+'</div><button class="del" data-a="d" data-id="'+t.id+'" aria-label="刪除">'+ic('trash')+'</button></div>'}).join('');
+    return '<div class="item'+(t.done?' done':'')+(t.id===popId?' pop':'')+'" style="--c:'+g.c+'"><button class="ck" data-a="t" data-id="'+t.id+'" aria-label="切換完成狀態">'+ic('ck')+'</button><div class="bd"><div class="t">'+esc(t.title)+'</div><div class="m"><span>'+t.when.slice(11,16)+'</span><span class="tg">'+g.n+'</span>'+(t.p==='h'?'<span class="hi">高優先</span>':t.p==='m'?'<span>中優先</span>':t.p==='l'?'<span>低優先</span>':'')+'</div>'+(t.note?'<div class="nt">'+esc(t.note)+'</div>':'')+'</div><button class="del" data-a="d" data-id="'+t.id+'" aria-label="刪除">'+ic('trash')+'</button></div>'}).join('');
+  popId=null;
+  if(animList){animList=false;if(mo()&&$('list').animate)$('list').animate([{opacity:0,transform:'translateY(10px)'},{opacity:1,transform:'none'}],{duration:360,easing:'cubic-bezier(.2,.8,.2,1)'})}
   drawCal()}
-$('tabs').onclick=function(e){var b=e.target.closest('button');if(!b)return;filter=b.dataset.f;Array.prototype.forEach.call(this.children,function(x){x.classList.toggle('on',x===b)});render()};
+$('tabs').onclick=function(e){var b=e.target.closest('button');if(!b)return;filter=b.dataset.f;this.style.setProperty('--i',Array.prototype.indexOf.call(this.children,b));Array.prototype.forEach.call(this.children,function(x){x.classList.toggle('on',x===b)});render()};
 $('list').onclick=function(e){var b=e.target.closest('button[data-a]');if(!b)return;var id=b.dataset.id;
-  if(b.dataset.a==='t'){tasks.forEach(function(t){if(t.id===id)t.done=!t.done});save();render()}
+  if(b.dataset.a==='t'){tasks.forEach(function(t){if(t.id===id)t.done=!t.done});save();popId=id;render()}
   else ask('刪除這個事項？','刪除後無法復原。',function(){tasks=tasks.filter(function(t){return t.id!==id});save();render();toast('已刪除')})};
 
 /* 新增表單 */
@@ -330,27 +460,33 @@ $('sv').onclick=function(){var t=$('title').value.trim();if(!t){toast('請輸入
   save();$('title').value='';$('note').value='';sheet(false);render();toast('已加入備忘錄')};
 document.addEventListener('keydown',function(e){if(e.key==='Escape'){if($('viewer').classList.contains('on'))closeV();else sheet(false)}});
 var gt=.55;try{var gs=localStorage.getItem('planner-glass');if(gs!==null&&!isNaN(+gs))gt=+gs}catch(e){}
-function setG(t){document.documentElement.style.setProperty('--ga',(0.9-t*0.8).toFixed(3));$('gv').textContent=Math.round(t*100)+'%'}
+function setG(t){$('gr').style.setProperty('--p',(t*100)+'%');document.documentElement.style.setProperty('--ga',(0.9-t*0.8).toFixed(3));$('gv').textContent=Math.round(t*100)+'%'}
 $('gr').value=gt;setG(gt);
 $('gr').oninput=function(){setG(+this.value);try{localStorage.setItem('planner-glass',this.value)}catch(e){}};
 
 /* 設定：背景 */
 var bgmode='color',bgURL=null;
 try{bgmode=localStorage.getItem('planner-bg')||'color'}catch(e){}
-function setBgBlob(b){if(bgURL)URL.revokeObjectURL(bgURL);bgURL=b?URL.createObjectURL(b):null}
+function setBgBlob(b){if(bgURL&&bgURL.indexOf('blob:')===0)URL.revokeObjectURL(bgURL);bgURL=b?(typeof b==='string'?b:URL.createObjectURL(b)):null}
+function shrinkImg(f,cb){var u=URL.createObjectURL(f),im=new Image();
+  function raw(){URL.revokeObjectURL(u);var r=new FileReader();r.onload=function(){cb(r.result)};r.onerror=function(){cb(f)};r.readAsDataURL(f)}
+  im.onload=function(){try{var w=im.naturalWidth,h=im.naturalHeight;if(!w||!h)return raw();var k=Math.min(1,1600/Math.max(w,h)),c=document.createElement('canvas');c.width=Math.round(w*k);c.height=Math.round(h*k);c.getContext('2d').drawImage(im,0,0,c.width,c.height);var d=c.toDataURL('image/jpeg',.82);URL.revokeObjectURL(u);if(d.length<200)return raw();cb(d)}catch(e){raw()}};
+  im.onerror=raw;im.src=u}
 function applyBg(){
   var m=bgmode==='photo'&&bgURL?'photo':bgmode==='mono'?'mono':'color',R=document.documentElement;
   R.dataset.bg=m;
   if(bgURL)R.style.setProperty('--bgimg','url("'+bgURL+'")');
   Array.prototype.forEach.call($('bgs').children,function(b){b.classList.toggle('on',b.dataset.b===m)});
   $('bgdel').style.display=bgURL?'':'none';
+  $('bgp').style.backgroundImage=bgURL?'url("'+bgURL+'")':'';
   document.querySelector('.p3').style.backgroundImage=bgURL?'url("'+bgURL+'")':''}
 function setBgMode(m){bgmode=m;try{localStorage.setItem('planner-bg',m)}catch(x){}applyBg()}
 function pickBg(){$('bgfile').value='';$('bgfile').click()}
 $('bgs').onclick=function(e){var b=e.target.closest('button');if(!b)return;if(b.dataset.b==='photo'&&!bgURL){pickBg();return}setBgMode(b.dataset.b)};
 $('bgpick').onclick=pickBg;
 $('bgfile').onchange=function(){var f=this.files&&this.files[0];if(!f)return;
-  idb('readwrite',function(s){return s.put(f,'bg')}).then(function(){setBgBlob(f);setBgMode('photo');toast('背景已更新')}).catch(function(){toast('儲存失敗，請再試一次')})};
+  shrinkImg(f,function(d){setBgBlob(d);setBgMode('photo');
+    idb('readwrite',function(s){return s.put(d,'bg')}).then(function(){toast('背景已更新')}).catch(function(){toast('已套用，但未能永久儲存')})})};
 $('bgdel').onclick=function(){idb('readwrite',function(s){return s.delete('bg')}).then(function(){setBgBlob(null);setBgMode('color');toast('已移除背景照片')})};
 idb('readonly',function(s){return s.get('bg')}).then(function(b){if(b)setBgBlob(b);applyBg()}).catch(applyBg);
 applyBg();
@@ -376,6 +512,32 @@ $('dc').onclick=function(){dayS(false)};
 $('dsv').onclick=function(){var n=$('dname').value.trim(),d=$('ddate').value;if(!n){toast('請輸入名稱');$('dname').focus();return}if(!d){toast('請選擇日期');return}
   idays.push({id:Date.now()+''+Math.floor(Math.random()*999),name:n,date:d});saveD();$('dname').value='';dayS(false);drawDays();drawCal();toast('已加入重要日子')};
 drawDays();
+/* 滑動手勢：分段控制按住滑動切換、月曆左右滑動換月 */
+(function(){
+  var tb=$('tabs'),down=false;
+  function pickAt(x){var r=tb.getBoundingClientRect(),n=tb.children.length,i=Math.max(0,Math.min(n-1,Math.floor((x-r.left-3)/((r.width-6)/n)))),b=tb.children[i];
+    if(b.dataset.f===filter)return;filter=b.dataset.f;tb.style.setProperty('--i',i);
+    Array.prototype.forEach.call(tb.children,function(c){c.classList.toggle('on',c===b)});render()}
+  tb.addEventListener('pointerdown',function(e){down=true;pickAt(e.clientX)});
+  tb.addEventListener('pointermove',function(e){if(down)pickAt(e.clientX)});
+  ['pointerup','pointercancel','lostpointercapture'].forEach(function(n){tb.addEventListener(n,function(){down=false})});
+  tb.addEventListener('click',function(e){if(e.detail!==0)e.stopPropagation()},true);
+  var g=$('grid'),sx=0,sy=0,tr=false,sw=false;
+  g.addEventListener('pointerdown',function(e){sx=e.clientX;sy=e.clientY;tr=true;sw=false});
+  g.addEventListener('pointermove',function(e){if(!tr)return;var dx=e.clientX-sx,dy=e.clientY-sy;
+    if(Math.abs(dx)>10&&Math.abs(dx)>Math.abs(dy)*1.3){sw=true;g.style.transition='none';g.style.transform='translateX('+(dx*.35)+'px)'}});
+  g.addEventListener('pointerup',function(e){if(!tr)return;tr=false;var dx=e.clientX-sx,dy=e.clientY-sy;g.style.transition='';g.style.transform='';
+    if(sw&&Math.abs(dx)>45&&Math.abs(dx)>Math.abs(dy)*1.3){if(dx<0)$('next').click();else $('prev').click()}});
+  g.addEventListener('pointercancel',function(){tr=false;g.style.transition='';g.style.transform=''});
+  g.addEventListener('click',function(e){if(sw){e.stopPropagation();sw=false}},true);
+})();
+/* 底部面板：按住頂部下拉即可關閉 */
+[['sheet','sc'],['set','setx'],['ds','dc']].forEach(function(p){
+  var s=$(p[0]),h=s.querySelector('.sh'),y0=0,dy=0,t0=0,on=false;
+  h.addEventListener('pointerdown',function(e){if(e.target.closest('button'))return;on=true;y0=e.clientY;dy=0;t0=Date.now();h.setPointerCapture(e.pointerId);s.style.transition='none'});
+  h.addEventListener('pointermove',function(e){if(!on)return;dy=Math.max(0,e.clientY-y0);s.style.transform='translateY('+dy+'px)'});
+  function end(){if(!on)return;on=false;var v=dy/Math.max(1,Date.now()-t0);s.style.transition='';s.style.transform='';if(dy>120||(dy>40&&v>.5))$(p[1]).click()}
+  h.addEventListener('pointerup',end);h.addEventListener('pointercancel',end)});
 document.addEventListener('visibilitychange',function(){if(!document.hidden){head();render()}});
 render();
 })();
