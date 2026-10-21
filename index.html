@@ -125,12 +125,34 @@ body::before{content:"";position:fixed;inset:-10%;z-index:-1;opacity:var(--bo);b
 .fab{background:linear-gradient(145deg,rgba(0,122,255,.88),rgba(64,156,255,.62));-webkit-backdrop-filter:blur(20px) saturate(180%);backdrop-filter:blur(20px) saturate(180%);border:1px solid rgba(255,255,255,.55);box-shadow:inset 0 1.5px 0 rgba(255,255,255,.7),inset 0 -2px 6px rgba(255,255,255,.2),0 10px 28px rgba(0,122,255,.4)}
 .al .bx,.toast{background:rgba(var(--gc),calc(var(--ga) + .3));border:1px solid var(--ge);box-shadow:inset 0 1px 0 var(--eh),0 10px 40px rgba(0,0,0,.2)}
 .gl{display:flex;align-items:center;gap:12px;padding:14px 16px}.gl input{flex:1;accent-color:var(--acc);touch-action:pan-x}.gl b{width:44px;text-align:right;font-variant-numeric:tabular-nums}
+.hd{display:flex;align-items:flex-start;justify-content:space-between}
+.gear{width:42px;height:42px;margin:16px 2px 0 0;border-radius:50%;display:grid;place-items:center;color:var(--acc);background:rgba(var(--gc),calc(var(--ga) + .2));border:1px solid var(--ge);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);box-shadow:inset 0 1px 0 var(--eh)}
+.gear svg{width:22px;height:22px}
+.pseg{grid-template-columns:repeat(4,1fr);width:216px}
+.lk{color:var(--acc);font-size:15px;font-weight:600}.lk.rd{color:var(--red)}
+.gh{font-size:13px;color:var(--sub);font-weight:600;margin:6px 4px}
+.bgs{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:12px}
+.bgs button{display:flex;flex-direction:column;align-items:center;gap:6px;font-size:13px;font-weight:600;padding:6px 4px 8px;border-radius:14px;border:2px solid transparent}
+.bgs button.on{border-color:var(--acc)}
+.bgs i{width:100%;height:54px;border-radius:10px;display:block;border:1px solid var(--line);background-size:cover;background-position:center}
+.p1{background:radial-gradient(70% 70% at 15% 15%,#5ac8fa,transparent),radial-gradient(70% 70% at 90% 30%,#ff9ec7,transparent),radial-gradient(70% 70% at 30% 100%,#a28bff,transparent),#ffd27a}
+.p2{background:linear-gradient(135deg,#fff,#9a9aa0 55%,#3a3a3e)}
+.p3{background-color:var(--fill)}
+input[type=date]{font-size:16px;background:var(--fill);border:0;outline:0;border-radius:8px;padding:6px 10px;min-height:34px}
+:root[data-bg="mono"] body::before{background:radial-gradient(45% 35% at 15% 10%,#fff,transparent 70%),radial-gradient(45% 35% at 90% 30%,#9a9aa0,transparent 70%),radial-gradient(50% 40% at 20% 80%,#5c5c62,transparent 70%),radial-gradient(45% 35% at 85% 92%,#d4d4d8,transparent 70%)}
+:root[data-bg="photo"] body::before{inset:0;opacity:1;background:linear-gradient(rgba(0,0,0,.1),rgba(0,0,0,.1)),var(--bgimg) center/cover no-repeat}
+.dayi{display:flex;align-items:center;gap:14px;padding:13px 14px;position:relative}
+.dayi+.dayi:before{content:"";position:absolute;top:0;left:14px;right:0;height:.5px;background:var(--line)}
+.dn{min-width:52px;text-align:center;line-height:1.1;color:#ff9500}
+.dn b{display:block;font-size:26px;font-weight:800}.dn small{font-size:12px;color:var(--sub)}
+.dayi.past{opacity:.55}.dayi.past .dn{color:var(--sub)}
+.dy.imp .n{box-shadow:inset 0 0 0 2px #ff9500}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <h1 id="date"></h1>
+  <div class="hd"><h1 id="date"></h1><button class="gear" id="gear" aria-label="設定"><svg class="i" data-i="gear"></svg></button></div>
   <p class="sub" id="week"></p>
 
   <div class="sec">課程表</div>
@@ -147,8 +169,8 @@ body::before{content:"";position:fixed;inset:-10%;z-index:-1;opacity:var(--bo);b
   <div class="seg" id="tabs"><button data-f="all" class="on">全部</button><button data-f="pending">未完成</button><button data-f="done">已完成</button></div>
   <div class="card" id="list"></div>
 
-  <div class="sec">外觀</div>
-  <div class="card"><div class="gl"><span>玻璃透明度</span><input type="range" id="gr" min="0" max="1" step="0.01" aria-label="玻璃透明度"><b id="gv"></b></div></div>
+  <div class="sec"><span>重要日子</span><button class="lk" id="addDay">＋ 新增</button></div>
+  <div class="card" id="days"></div>
 </div>
 
 <button class="fab" id="fab"><svg class="i" data-i="add"></svg>新增事項</button>
@@ -159,12 +181,25 @@ body::before{content:"";position:fixed;inset:-10%;z-index:-1;opacity:var(--bo);b
   <div class="fld"><div class="fr"><input type="text" id="title" maxlength="60" placeholder="事項名稱，例如：數學作業" autocomplete="off"></div></div>
   <div class="fld">
     <div class="fr"><label for="tm">時間</label><input type="time" id="tm"></div>
-    <div class="fr"><label>優先程度</label><div class="pseg"><label><input type="radio" name="p" value="h"><span>高</span></label><label><input type="radio" name="p" value="m" checked><span>中</span></label><label><input type="radio" name="p" value="l"><span>低</span></label></div></div>
+    <div class="fr"><label>優先程度</label><div class="pseg"><label><input type="radio" name="p" value="n" checked><span>無</span></label><label><input type="radio" name="p" value="h"><span>高</span></label><label><input type="radio" name="p" value="m"><span>中</span></label><label><input type="radio" name="p" value="l"><span>低</span></label></div></div>
   </div>
   <div class="fld"><div class="chips" id="tags"></div></div>
   <div class="fld"><div class="fr"><textarea id="note" placeholder="提醒備註（選填）"></textarea></div></div>
 </div>
 
+<input type="file" id="bgfile" accept="image/*" hidden>
+<div class="sheet" id="set">
+  <div class="sh"><span></span><b>設定</b><button class="sv" id="setx">完成</button></div>
+  <div class="gh">背景</div>
+  <div class="fld"><div class="bgs" id="bgs"><button data-b="color"><i class="p1"></i>原始色彩</button><button data-b="mono"><i class="p2"></i>黑白玻璃</button><button data-b="photo"><i class="p3"></i>自選照片</button></div>
+  <div class="fr"><button class="lk" id="bgpick">從相簿選擇照片</button><button class="lk rd" id="bgdel">移除照片</button></div></div>
+  <div class="gh">玻璃</div>
+  <div class="fld"><div class="gl"><span>玻璃透明度</span><input type="range" id="gr" min="0" max="1" step="0.01" aria-label="玻璃透明度"><b id="gv"></b></div></div>
+</div>
+<div class="sheet" id="ds">
+  <div class="sh"><button id="dc">取消</button><b>新增重要日子</b><button class="sv" id="dsv">加入</button></div>
+  <div class="fld"><div class="fr"><input type="text" id="dname" maxlength="30" placeholder="名稱，例如：期末考、生日、旅行" autocomplete="off"></div><div class="fr"><label for="ddate">日期</label><input type="date" id="ddate"></div></div>
+</div>
 <div class="modal" id="viewer">
   <div class="vb top"><button class="vbtn" id="vc"><svg class="i" data-i="x"></svg>關閉</button><span id="zl">100%</span><button class="vbtn" id="vr"><svg class="i" data-i="img"></svg>更換</button></div>
   <div id="stage"><img id="vimg" alt="課程表" draggable="false"></div>
@@ -183,7 +218,7 @@ body::before{content:"";position:fixed;inset:-10%;z-index:-1;opacity:var(--bo);b
 <script>
 (function(){
 "use strict";
-var P={l:'<path d="m15 18-6-6 6-6"/>',r:'<path d="m9 18 6-6-6-6"/>',add:'<path d="M12 5v14M5 12h14"/>',x:'<path d="M18 6 6 18M6 6l12 12"/>',img:'<rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/>',min:'<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3M8 11h6"/>',max:'<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3M11 8v6M8 11h6"/>',rot:'<path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/>',trash:'<path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6M10 11v6M14 11v6"/>',cam:'<path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/>',zoom:'<path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>',ck:'<path d="M20 6 9 17l-5-5"/>'};
+var P={l:'<path d="m15 18-6-6 6-6"/>',r:'<path d="m9 18 6-6-6-6"/>',add:'<path d="M12 5v14M5 12h14"/>',x:'<path d="M18 6 6 18M6 6l12 12"/>',img:'<rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/>',min:'<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3M8 11h6"/>',max:'<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3M11 8v6M8 11h6"/>',rot:'<path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/>',trash:'<path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6M10 11v6M14 11v6"/>',cam:'<path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/>',zoom:'<path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>',ck:'<path d="M20 6 9 17l-5-5"/>',gear:'<path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/>'};
 function ic(n){return '<svg class="i" viewBox="0 0 24 24">'+P[n]+'</svg>'}
 document.querySelectorAll('svg[data-i]').forEach(function(s){s.setAttribute('viewBox','0 0 24 24');s.innerHTML=P[s.dataset.i]});
 var $=function(i){return document.getElementById(i)};
@@ -263,7 +298,7 @@ function drawCal(){
     var k=cy+'-'+two(cm+1)+'-'+two(d),a=(by[k]||[]).filter(function(t){return!t.done}),seen=[],dots='';
     a.forEach(function(t){if(seen.indexOf(t.tag)<0&&seen.length<3){seen.push(t.tag);dots+='<i style="--c:'+tg(t.tag).c+'"></i>'}});
     if(!a.length&&(by[k]||[]).length)dots='<i style="--c:var(--sub);opacity:.4"></i>';
-    h+='<button class="dy'+((first+d-1)%7===0?' sun':'')+(k===today?' now':'')+(k===sel?' sel':'')+'" data-k="'+k+'"><span class="n">'+d+'</span><span class="dots">'+dots+'</span></button>'}
+    h+='<button class="dy'+((first+d-1)%7===0?' sun':'')+(k===today?' now':'')+(k===sel?' sel':'')+(impSet[k]?' imp':'')+'" data-k="'+k+'"><span class="n">'+d+'</span><span class="dots">'+dots+'</span></button>'}
   $('grid').innerHTML=h}
 $('grid').onclick=function(e){var b=e.target.closest('.dy[data-k]');if(!b)return;sel=b.dataset.k;render()};
 $('prev').onclick=function(){cm--;if(cm<0){cm=11;cy--}drawCal()};
@@ -273,13 +308,13 @@ $('today').onclick=function(){var n=new Date();cy=n.getFullYear();cm=n.getMonth(
 /* 當天清單 */
 function render(){
   var p=sel.split('-'),d=new Date(+p[0],p[1]-1,+p[2]),t0=dk(new Date());
-  $('dl').textContent=(sel===t0?'今天 · ':'')+(+p[1])+'月'+(+p[2])+'日 星期'+W[d.getDay()];
+  $('dl').textContent=(sel===t0?'今天 · ':'')+(+p[1])+'月'+(+p[2])+'日 星期'+W[d.getDay()]+(impSet[sel]?' · 重要：'+impSet[sel]:'');
   var all=tasks.filter(function(t){return t.when.slice(0,10)===sel}).sort(function(a,b){return a.when<b.when?-1:1});
   $('cnt').textContent=all.length?all.filter(function(t){return!t.done}).length+' 項未完成':'';
   var l=all.filter(function(t){return filter==='all'||(filter==='done')===t.done});
   if(!l.length)$('list').innerHTML='<div class="empty">'+(all.length?'沒有符合的事項':'這天沒有事項，按「新增事項」記錄吧')+'</div>';
   else $('list').innerHTML=l.map(function(t){var g=tg(t.tag);
-    return '<div class="item'+(t.done?' done':'')+'" style="--c:'+g.c+'"><button class="ck" data-a="t" data-id="'+t.id+'" aria-label="切換完成狀態">'+ic('ck')+'</button><div class="bd"><div class="t">'+esc(t.title)+'</div><div class="m"><span>'+t.when.slice(11,16)+'</span><span class="tg">'+g.n+'</span>'+(t.p==='h'?'<span class="hi">高優先</span>':t.p==='l'?'<span>低優先</span>':'')+'</div>'+(t.note?'<div class="nt">'+esc(t.note)+'</div>':'')+'</div><button class="del" data-a="d" data-id="'+t.id+'" aria-label="刪除">'+ic('trash')+'</button></div>'}).join('');
+    return '<div class="item'+(t.done?' done':'')+'" style="--c:'+g.c+'"><button class="ck" data-a="t" data-id="'+t.id+'" aria-label="切換完成狀態">'+ic('ck')+'</button><div class="bd"><div class="t">'+esc(t.title)+'</div><div class="m"><span>'+t.when.slice(11,16)+'</span><span class="tg">'+g.n+'</span>'+(t.p==='h'?'<span class="hi">高優先</span>':t.p==='m'?'<span>中優先</span>':t.p==='l'?'<span>低優先</span>':'')+'</div>'+(t.note?'<div class="nt">'+esc(t.note)+'</div>':'')+'</div><button class="del" data-a="d" data-id="'+t.id+'" aria-label="刪除">'+ic('trash')+'</button></div>'}).join('');
   drawCal()}
 $('tabs').onclick=function(e){var b=e.target.closest('button');if(!b)return;filter=b.dataset.f;Array.prototype.forEach.call(this.children,function(x){x.classList.toggle('on',x===b)});render()};
 $('list').onclick=function(e){var b=e.target.closest('button[data-a]');if(!b)return;var id=b.dataset.id;
@@ -298,6 +333,49 @@ var gt=.55;try{var gs=localStorage.getItem('planner-glass');if(gs!==null&&!isNaN
 function setG(t){document.documentElement.style.setProperty('--ga',(0.9-t*0.8).toFixed(3));$('gv').textContent=Math.round(t*100)+'%'}
 $('gr').value=gt;setG(gt);
 $('gr').oninput=function(){setG(+this.value);try{localStorage.setItem('planner-glass',this.value)}catch(e){}};
+
+/* 設定：背景 */
+var bgmode='color',bgURL=null;
+try{bgmode=localStorage.getItem('planner-bg')||'color'}catch(e){}
+function setBgBlob(b){if(bgURL)URL.revokeObjectURL(bgURL);bgURL=b?URL.createObjectURL(b):null}
+function applyBg(){
+  var m=bgmode==='photo'&&bgURL?'photo':bgmode==='mono'?'mono':'color',R=document.documentElement;
+  R.dataset.bg=m;
+  if(bgURL)R.style.setProperty('--bgimg','url("'+bgURL+'")');
+  Array.prototype.forEach.call($('bgs').children,function(b){b.classList.toggle('on',b.dataset.b===m)});
+  $('bgdel').style.display=bgURL?'':'none';
+  document.querySelector('.p3').style.backgroundImage=bgURL?'url("'+bgURL+'")':''}
+function setBgMode(m){bgmode=m;try{localStorage.setItem('planner-bg',m)}catch(x){}applyBg()}
+function pickBg(){$('bgfile').value='';$('bgfile').click()}
+$('bgs').onclick=function(e){var b=e.target.closest('button');if(!b)return;if(b.dataset.b==='photo'&&!bgURL){pickBg();return}setBgMode(b.dataset.b)};
+$('bgpick').onclick=pickBg;
+$('bgfile').onchange=function(){var f=this.files&&this.files[0];if(!f)return;
+  idb('readwrite',function(s){return s.put(f,'bg')}).then(function(){setBgBlob(f);setBgMode('photo');toast('背景已更新')}).catch(function(){toast('儲存失敗，請再試一次')})};
+$('bgdel').onclick=function(){idb('readwrite',function(s){return s.delete('bg')}).then(function(){setBgBlob(null);setBgMode('color');toast('已移除背景照片')})};
+idb('readonly',function(s){return s.get('bg')}).then(function(b){if(b)setBgBlob(b);applyBg()}).catch(applyBg);
+applyBg();
+function setOpen(on){$('set').classList.toggle('on',on);$('ov').classList.toggle('on',on)}
+$('gear').onclick=function(){setOpen(true)};$('setx').onclick=function(){setOpen(false)};
+var _ov=$('ov').onclick;$('ov').onclick=function(){_ov();setOpen(false);dayS(false)};
+
+/* 重要日子 */
+var idays=[],impSet={};
+try{idays=JSON.parse(localStorage.getItem('planner-days')||'[]')}catch(e){}
+function saveD(){try{localStorage.setItem('planner-days',JSON.stringify(idays))}catch(e){toast('無法儲存資料')}}
+function dd(k){var p=k.split('-'),n=new Date();return Math.round((new Date(+p[0],p[1]-1,+p[2])-new Date(n.getFullYear(),n.getMonth(),n.getDate()))/864e5)}
+function drawDays(){
+  impSet={};idays.forEach(function(x){impSet[x.date]=impSet[x.date]?impSet[x.date]+'、'+x.name:x.name});
+  var l=idays.slice().sort(function(a,b){var da=dd(a.date),db=dd(b.date);return (da<0)-(db<0)||(da<0?db-da:da-db)});
+  $('days').innerHTML=l.length?l.map(function(x){var n=dd(x.date),p=x.date.split('-');
+    return '<div class="dayi'+(n<0?' past':'')+'"><div class="dn"><b>'+(n===0?'今天':Math.abs(n))+'</b><small>'+(n===0?'':n>0?'天後':'天前')+'</small></div><div class="bd"><div class="t">'+esc(x.name)+'</div><div class="m"><span>'+p[0]+'年'+(+p[1])+'月'+(+p[2])+'日</span></div></div><button class="del" data-id="'+x.id+'" aria-label="刪除">'+ic('trash')+'</button></div>'}).join(''):'<div class="empty">加入考試、生日、旅行等重要日子，這裡會顯示倒數</div>'}
+$('days').onclick=function(e){var b=e.target.closest('button[data-id]');if(!b)return;var id=b.dataset.id;
+  ask('刪除這個重要日子？','刪除後無法復原。',function(){idays=idays.filter(function(x){return x.id!==id});saveD();drawDays();drawCal();toast('已刪除')})};
+function dayS(on){$('ds').classList.toggle('on',on);$('ov').classList.toggle('on',on);if(on)setTimeout(function(){$('dname').focus()},320)}
+$('addDay').onclick=function(){$('ddate').value=sel;dayS(true)};
+$('dc').onclick=function(){dayS(false)};
+$('dsv').onclick=function(){var n=$('dname').value.trim(),d=$('ddate').value;if(!n){toast('請輸入名稱');$('dname').focus();return}if(!d){toast('請選擇日期');return}
+  idays.push({id:Date.now()+''+Math.floor(Math.random()*999),name:n,date:d});saveD();$('dname').value='';dayS(false);drawDays();drawCal();toast('已加入重要日子')};
+drawDays();
 document.addEventListener('visibilitychange',function(){if(!document.hidden){head();render()}});
 render();
 })();
