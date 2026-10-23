@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="zh-HK">
+<!DOCTYPE html><html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
@@ -13,7 +13,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
-<meta name="app-version" content="1.4.0">
+<meta name="app-version" content="1.5.0">
 <title>Chronicle</title>
 <style>
 :root{--bg:#f2f2f7;--card:#fff;--ink:#111;--sub:#8a8a8e;--line:rgba(60,60,67,.14);--fill:rgba(118,118,128,.12);--acc:#007aff;--red:#ff3b30;--glass:rgba(249,249,251,.82);
@@ -317,80 +317,85 @@ body::before{transform:translateZ(0);will-change:transform}
 .dayi:active{transform:scale(.982);background:rgba(127,127,127,.09);transition-duration:.12s}
 .sheet.on{transition:transform .6s var(--ios),visibility 0s}
 .ver{color:var(--sub);font-variant-numeric:tabular-nums;font-size:15px}
+.lseg{position:relative;display:grid;grid-template-columns:1fr 1fr;width:100%;background:var(--fill);border-radius:14px;padding:3px}
+.lseg::before{content:"";position:absolute;top:3px;bottom:3px;left:3px;width:calc((100% - 6px)/2);border-radius:11px;background:var(--card);box-shadow:0 3px 10px rgba(0,0,0,.14);transform:translateX(calc(var(--li,0)*100%));transition:transform .5s var(--sp)}
+.lseg button{position:relative;z-index:1;padding:8px 0;border-radius:11px;font-size:14.5px;font-weight:600}
 </style>
 </head>
 <body>
 <div id="bgp"></div>
 <div class="wrap">
-  <div class="hd"><h1 id="date"></h1><button class="gear" id="gear" aria-label="設定"><svg class="i" data-i="gear"></svg></button></div>
+  <div class="hd"><h1 id="date"></h1><button class="gear" id="gear" data-i18n-aria="settings" aria-label="設定"><svg class="i" data-i="gear"></svg></button></div>
   <p class="sub" id="week"></p>
 
-  <div class="sec">課程表</div>
+  <div class="sec" data-i18n="timetable">課程表</div>
   <input type="file" id="file" accept="image/*" hidden>
   <div class="card" id="tt"></div>
 
-  <div class="sec">月曆</div>
+  <div class="sec" data-i18n="calendar">月曆</div>
   <div class="card cal">
-    <div class="mh"><b id="mt"></b><div><button class="td" id="today">今天</button><button class="nv" id="prev" aria-label="上個月"><svg class="i" data-i="l"></svg></button><button class="nv" id="next" aria-label="下個月"><svg class="i" data-i="r"></svg></button></div></div>
+    <div class="mh"><b id="mt"></b><div><button class="td" id="today" data-i18n="today">今天</button><button class="nv" id="prev" data-i18n-aria="prevM" aria-label="上個月"><svg class="i" data-i="l"></svg></button><button class="nv" id="next" data-i18n-aria="nextM" aria-label="下個月"><svg class="i" data-i="r"></svg></button></div></div>
     <div class="gv" id="gv"><div class="gt" id="gt"><div class="g" id="gp" aria-hidden="true"></div><div class="g" id="grid"></div><div class="g" id="gn" aria-hidden="true"></div></div></div>
   </div>
 
   <div class="sec"><span id="dl"></span><span id="cnt"></span></div>
-  <div class="seg" id="tabs"><button data-f="all" class="on">全部</button><button data-f="pending">未完成</button><button data-f="done">已完成</button></div>
+  <div class="seg" id="tabs"><button data-f="all" class="on" data-i18n="tabAll">全部</button><button data-f="pending" data-i18n="tabPending">未完成</button><button data-f="done" data-i18n="tabDone">已完成</button></div>
   <div class="card" id="list"></div>
 
-  <div class="sec"><span>重要日子</span><button class="lk" id="addDay">＋ 新增</button></div>
+  <div class="sec"><span data-i18n="important">重要日子</span><button class="lk" id="addDay" data-i18n="addNew">＋ 新增</button></div>
   <div class="card" id="days"></div>
 </div>
 
-<button class="fab" id="fab"><svg class="i" data-i="add"></svg>新增事項</button>
+<button class="fab" id="fab"><svg class="i" data-i="add"></svg><span data-i18n="newTask">新增事項</span></button>
 
 <div class="ov" id="ov"></div>
 <div class="sheet" id="sheet">
-  <div class="sh"><button id="sc">取消</button><b id="stt">新增事項</b><button class="sv" id="sv">加入</button></div>
-  <div class="fld"><div class="fr"><input type="text" id="title" maxlength="60" placeholder="事項名稱，例如：數學作業" autocomplete="off"></div></div>
+  <div class="sh"><button id="sc" data-i18n="cancel">取消</button><b id="stt" data-i18n="newTask">新增事項</b><button class="sv" id="sv" data-i18n="add">加入</button></div>
+  <div class="fld"><div class="fr"><input type="text" id="title" maxlength="60" data-i18n-ph="phTitle" placeholder="事項名稱，例如：數學作業" autocomplete="off"></div></div>
   <div class="fld">
-    <div class="fr"><label for="td2">日期</label><input type="date" id="td2"></div>
-    <div class="fr"><label for="tm">時間</label><input type="time" id="tm"></div>
-    <div class="fr"><label>優先程度</label><div class="pseg"><label><input type="radio" name="p" value="n" checked><span>無</span></label><label><input type="radio" name="p" value="h"><span>高</span></label><label><input type="radio" name="p" value="m"><span>中</span></label><label><input type="radio" name="p" value="l"><span>低</span></label></div></div>
+    <div class="fr"><label for="td2" data-i18n="date">日期</label><input type="date" id="td2"></div>
+    <div class="fr"><label for="tm" data-i18n="time">時間</label><input type="time" id="tm"></div>
+    <div class="fr"><label data-i18n="priority">優先程度</label><div class="pseg"><label><input type="radio" name="p" value="n" checked><span data-i18n="pNone">無</span></label><label><input type="radio" name="p" value="h"><span data-i18n="pHigh">高</span></label><label><input type="radio" name="p" value="m"><span data-i18n="pMid">中</span></label><label><input type="radio" name="p" value="l"><span data-i18n="pLow">低</span></label></div></div>
   </div>
   <div class="fld"><div class="chips" id="tags"></div></div>
-  <div class="fld"><div class="fr"><textarea id="note" placeholder="提醒備註（選填）"></textarea></div></div>
+  <div class="fld"><div class="fr"><textarea id="note" data-i18n-ph="phNote" placeholder="提醒備註（選填）"></textarea></div></div>
 </div>
 
 <input type="file" id="bgfile" accept="image/*" hidden>
 <div class="sheet" id="set">
-  <div class="sh"><span></span><b>設定</b><button class="sv" id="setx">完成</button></div>
-  <div class="gh">背景</div>
-  <div class="fld"><div class="bgs" id="bgs"><button data-b="color"><i class="p1"></i>原始色彩</button><button data-b="mono"><i class="p2"></i>黑白玻璃</button><button data-b="photo"><i class="p3"></i>自選照片</button></div>
-  <div class="fr"><button class="lk" id="bgpick">從相簿選擇照片</button><button class="lk rd" id="bgdel">移除照片</button></div></div>
-  <div class="gh">玻璃</div>
-  <div class="fld"><div class="gl"><span>玻璃透明度</span><input type="range" id="gr" min="0" max="1" step="0.01" aria-label="玻璃透明度"><b id="gpct"></b></div></div>
-  <div class="gh">安裝</div>
+  <div class="sh"><span></span><b data-i18n="settings">設定</b><button class="sv" id="setx" data-i18n="finish">完成</button></div>
+  <div class="gh" data-i18n="language">語言</div>
+  <div class="fld"><div class="fr"><div class="lseg" id="lang"><button data-l="zh">繁體中文</button><button data-l="en">English</button></div></div></div>
+  <div class="gh" data-i18n="background">背景</div>
+  <div class="fld"><div class="bgs" id="bgs"><button data-b="color"><i class="p1"></i><span data-i18n="bgColor">原始色彩</span></button><button data-b="mono"><i class="p2"></i><span data-i18n="bgMono">黑白玻璃</span></button><button data-b="photo"><i class="p3"></i><span data-i18n="bgPhoto">自選照片</span></button></div>
+  <div class="fr"><button class="lk" id="bgpick" data-i18n="pickPhoto">從相簿選擇照片</button><button class="lk rd" id="bgdel" data-i18n="rmPhoto">移除照片</button></div></div>
+  <div class="gh" data-i18n="glass">玻璃</div>
+  <div class="fld"><div class="gl"><span data-i18n="glassOp">玻璃透明度</span><input type="range" id="gr" min="0" max="1" step="0.01" data-i18n-aria="glassOp" aria-label="玻璃透明度"><b id="gpct"></b></div></div>
+  <div class="gh" data-i18n="install">安裝</div>
   <div class="fld"><div class="fr"><button class="lk" id="inst">安裝到主畫面</button><span class="ver" id="instst"></span></div></div>
-  <div class="gh">資料備份</div>
-  <div class="fld"><div class="fr"><button class="lk" id="bkx">匯出備份</button><button class="lk" id="bki">匯入備份</button></div></div><input type="file" id="bkf" accept=".json,application/json" hidden>
-  <div class="gh">關於</div>
-  <div class="fld"><div class="fr"><label>版本</label><span class="ver" id="ver"></span></div></div>
+  <div class="gh" data-i18n="backup">資料備份</div>
+  <div class="fld"><div class="fr"><button class="lk" id="bkx" data-i18n="export">匯出備份</button><button class="lk" id="bki" data-i18n="import">匯入備份</button></div></div><input type="file" id="bkf" accept=".json,application/json" hidden>
+  <div class="gh" data-i18n="about">關於</div>
+  <div class="fld"><div class="fr"><label data-i18n="version">版本</label><span class="ver" id="ver"></span></div></div>
 </div>
 <div class="sheet" id="ds">
-  <div class="sh"><button id="dc">取消</button><b>新增重要日子</b><button class="sv" id="dsv">加入</button></div>
-  <div class="fld"><div class="fr"><input type="text" id="dname" maxlength="30" placeholder="名稱，例如：期末考、生日、旅行" autocomplete="off"></div><div class="fr"><label for="ddate">日期</label><input type="date" id="ddate"></div></div>
+  <div class="sh"><button id="dc" data-i18n="cancel">取消</button><b data-i18n="newDay">新增重要日子</b><button class="sv" id="dsv" data-i18n="add">加入</button></div>
+  <div class="fld"><div class="fr"><input type="text" id="dname" maxlength="30" data-i18n-ph="phDay" placeholder="名稱，例如：期末考、生日、旅行" autocomplete="off"></div><div class="fr"><label for="ddate" data-i18n="date">日期</label><input type="date" id="ddate"></div></div>
 </div>
 <div class="modal" id="viewer">
-  <div class="vb top"><button class="vbtn" id="vc"><svg class="i" data-i="x"></svg>關閉</button><span id="zl">100%</span><button class="vbtn" id="vr"><svg class="i" data-i="img"></svg>更換</button></div>
-  <div id="stage"><img id="vimg" alt="課程表" draggable="false"></div>
+  <div class="vb top"><button class="vbtn" id="vc"><svg class="i" data-i="x"></svg><span data-i18n="close">關閉</span></button><span id="zl">100%</span><button class="vbtn" id="vr"><svg class="i" data-i="img"></svg><span data-i18n="replace">更換</span></button></div>
+  <div id="stage"><img id="vimg" data-i18n-alt="ttAlt" alt="課程表" draggable="false"></div>
   <div class="vb bot">
-    <button class="vbtn" id="zo" aria-label="縮小"><svg class="i" data-i="min"></svg></button>
-    <button class="vbtn" id="zi" aria-label="放大"><svg class="i" data-i="max"></svg></button>
-    <button class="vbtn" id="rot" aria-label="旋轉"><svg class="i" data-i="rot"></svg></button>
-    <button class="vbtn" id="rst">重設</button>
-    <button class="vbtn" id="vd" aria-label="刪除"><svg class="i" data-i="trash"></svg></button>
+    <button class="vbtn" id="zo" data-i18n-aria="zoomOut" aria-label="縮小"><svg class="i" data-i="min"></svg></button>
+    <button class="vbtn" id="zi" data-i18n-aria="zoomIn" aria-label="放大"><svg class="i" data-i="max"></svg></button>
+    <button class="vbtn" id="rot" data-i18n-aria="rotate" aria-label="旋轉"><svg class="i" data-i="rot"></svg></button>
+    <button class="vbtn" id="rst" data-i18n="reset">重設</button>
+    <button class="vbtn" id="vd" data-i18n-aria="del" aria-label="刪除"><svg class="i" data-i="trash"></svg></button>
   </div>
 </div>
 
-<div class="al" id="ial"><div class="bx"><h3 id="it">安裝 Chronicle</h3><p id="ip" style="white-space:pre-line;text-align:left"></p><div class="bt" style="grid-template-columns:1fr"><button id="iok">知道了</button></div></div></div>
-<div class="al" id="al"><div class="bx"><h3 id="at"></h3><p id="ap"></p><div class="bt"><button id="an">取消</button><button id="ay">刪除</button></div></div></div>
+<div class="al" id="ial"><div class="bx"><h3 id="it">安裝 Chronicle</h3><p id="ip" style="white-space:pre-line;text-align:left"></p><div class="bt" style="grid-template-columns:1fr"><button id="iok" data-i18n="gotIt">知道了</button></div></div></div>
+<div class="al" id="al"><div class="bx"><h3 id="at"></h3><p id="ap"></p><div class="bt"><button id="an" data-i18n="cancel">取消</button><button id="ay">刪除</button></div></div></div>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -400,11 +405,98 @@ var P={l:'<path d="m15 18-6-6 6-6"/>',r:'<path d="m9 18 6-6-6-6"/>',add:'<path d
 function ic(n){return '<svg class="i" viewBox="0 0 24 24">'+P[n]+'</svg>'}
 document.querySelectorAll('svg[data-i]').forEach(function(s){s.setAttribute('viewBox','0 0 24 24');s.innerHTML=P[s.dataset.i]});
 var $=function(i){return document.getElementById(i)};
-var W=['日','一','二','三','四','五','六'];
+var LG='zh';
+try{var _sl=localStorage.getItem('planner-lang');if(_sl==='zh'||_sl==='en')LG=_sl;else LG=/^zh/i.test(navigator.language||'zh')?'zh':'en'}catch(e){}
+var I18N={
+zh:{
+settings:"設定",timetable:"課程表",calendar:"月曆",today:"今天",prevM:"上個月",nextM:"下個月",
+tabAll:"全部",tabPending:"未完成",tabDone:"已完成",important:"重要日子",addNew:"＋ 新增",
+newTask:"新增事項",editTask:"編輯事項",cancel:"取消",add:"加入",save:"儲存",finish:"完成",
+phTitle:"事項名稱，例如：數學作業",date:"日期",time:"時間",priority:"優先程度",
+pNone:"無",pHigh:"高",pMid:"中",pLow:"低",phNote:"提醒備註（選填）",
+language:"語言",background:"背景",bgColor:"原始色彩",bgMono:"黑白玻璃",bgPhoto:"自選照片",
+pickPhoto:"從相簿選擇照片",rmPhoto:"移除照片",glass:"玻璃",glassOp:"玻璃透明度",
+install:"安裝",installBtn:"安裝到主畫面",installed:"已安裝",installedBtn:"已安裝在主畫面",
+backup:"資料備份",export:"匯出備份",import:"匯入備份",about:"關於",version:"版本",
+close:"關閉",replace:"更換",zoomOut:"縮小",zoomIn:"放大",rotate:"旋轉",reset:"重設",del:"刪除",
+ttAlt:"課程表",gotIt:"知道了",newDay:"新增重要日子",phDay:"名稱，例如：期末考、生日、旅行",
+uploadTT:"上傳課程表",uploadSub:"拍照或從相簿選取",fullView:"全螢幕查看",zoomView:"放大查看",
+ttSaved:"課程表已儲存",saveFail:"儲存失敗，請再試一次",delTTTitle:"刪除課程表？",
+delTTMsg:"刪除後需要重新上傳相片。",ttDeleted:"已刪除課程表",
+tag_hw:"功課作業",tag_ex:"考試測驗",tag_me:"個人行程",tag_td:"待辦事項",
+cantSave:"無法儲存資料",toggleDone:"切換完成狀態",pendingN:"{0} 項未完成",noMatch:"沒有符合的事項",
+emptyDay:"這天沒有事項，按「新增事項」記錄吧",prHigh:"高優先",prMid:"中優先",prLow:"低優先",
+impLabel:" · 重要：",todayDot:"今天 · ",delTaskTitle:"刪除這個事項？",delTaskMsg:"刪除後無法復原。",
+deleted:"已刪除",enterTitle:"請輸入事項名稱",savedEdit:"已儲存修改",addedTask:"已加入備忘錄",
+readPhotoFail:"讀取相片失敗，請再試",photoUnsupported:"這張相片格式不支援，請換另一張",
+bgUpdated:"背景已更新",bgNotPersist:"已套用，但未能永久儲存",bgRemoved:"已移除背景照片",
+exported:"已匯出備份",invalidBackup:"備份檔案無效",importAsk:"匯入備份？",
+importMsg:"會取代目前所有事項與重要日子。",importOk:"匯入",imported:"已匯入備份",
+delDayTitle:"刪除這個重要日子？",enterName:"請輸入名稱",pickDate:"請選擇日期",dayAdded:"已加入重要日子",
+sep:"、",emptyDays:"加入考試、生日、旅行等重要日子，這裡會顯示倒數",
+daysLeft:"天後",dayLeft1:"天後",daysAgo:"天前",dayAgo1:"天前",
+installTitle:"安裝到主畫面",
+iosMsg:"1. 點底部的「分享」按鈕（方框加向上箭頭）\n2. 向下滑，選「加入主畫面」\n3. 按右上角「加入」\n\n建議使用 Safari 開啟此頁。",
+otherMsg:"請打開瀏覽器選單（右上角 ⋮），選「安裝應用程式」或「加到主畫面」。\n\n若沒有此選項，請改用 Chrome 或 Safari 開啟。",
+alreadyInst:"Chronicle 已安裝在主畫面",installedToast:"已安裝 Chronicle",
+wdS:["日","一","二","三","四","五","六"],
+wdL:["星期日","星期一","星期二","星期三","星期四","星期五","星期六"],
+monS:[],monL:[]
+},
+en:{
+settings:"Settings",timetable:"Timetable",calendar:"Calendar",today:"Today",prevM:"Previous month",nextM:"Next month",
+tabAll:"All",tabPending:"Pending",tabDone:"Done",important:"Important Dates",addNew:"+ Add",
+newTask:"New Task",editTask:"Edit Task",cancel:"Cancel",add:"Add",save:"Save",finish:"Done",
+phTitle:"Task name, e.g. Math homework",date:"Date",time:"Time",priority:"Priority",
+pNone:"None",pHigh:"High",pMid:"Med",pLow:"Low",phNote:"Notes (optional)",
+language:"Language",background:"Background",bgColor:"Colorful",bgMono:"Mono Glass",bgPhoto:"My Photo",
+pickPhoto:"Choose from Photos",rmPhoto:"Remove Photo",glass:"Glass",glassOp:"Glass transparency",
+install:"Install",installBtn:"Add to Home Screen",installed:"Installed",installedBtn:"Installed on Home Screen",
+backup:"Backup",export:"Export Backup",import:"Import Backup",about:"About",version:"Version",
+close:"Close",replace:"Replace",zoomOut:"Zoom out",zoomIn:"Zoom in",rotate:"Rotate",reset:"Reset",del:"Delete",
+ttAlt:"Timetable",gotIt:"Got it",newDay:"New Important Date",phDay:"Name, e.g. Finals, Birthday, Trip",
+uploadTT:"Upload timetable",uploadSub:"Take a photo or choose from Photos",fullView:"Full screen",zoomView:"View larger",
+ttSaved:"Timetable saved",saveFail:"Save failed. Please try again.",delTTTitle:"Delete timetable?",
+delTTMsg:"You’ll need to upload the photo again.",ttDeleted:"Timetable deleted",
+tag_hw:"Homework",tag_ex:"Exams",tag_me:"Personal",tag_td:"To-do",
+cantSave:"Unable to save data",toggleDone:"Toggle completion",pendingN:"{0} pending",noMatch:"No matching tasks",
+emptyDay:"No tasks for this day. Tap “New Task” to add one.",prHigh:"High priority",prMid:"Medium priority",prLow:"Low priority",
+impLabel:" · Important: ",todayDot:"Today · ",delTaskTitle:"Delete this task?",delTaskMsg:"This can’t be undone.",
+deleted:"Deleted",enterTitle:"Please enter a task name",savedEdit:"Changes saved",addedTask:"Task added",
+readPhotoFail:"Couldn’t read the photo. Please try again.",photoUnsupported:"This photo format isn’t supported. Please try another.",
+bgUpdated:"Background updated",bgNotPersist:"Applied, but couldn’t be saved permanently",bgRemoved:"Background photo removed",
+exported:"Backup exported",invalidBackup:"Invalid backup file",importAsk:"Import backup?",
+importMsg:"This will replace all current tasks and important dates.",importOk:"Import",imported:"Backup imported",
+delDayTitle:"Delete this important date?",enterName:"Please enter a name",pickDate:"Please choose a date",dayAdded:"Important date added",
+sep:", ",emptyDays:"Add exams, birthdays, trips and more. Countdowns will appear here.",
+daysLeft:"days left",dayLeft1:"day left",daysAgo:"days ago",dayAgo1:"day ago",
+installTitle:"Add to Home Screen",
+iosMsg:"1. Tap the Share button at the bottom (a square with an up arrow)\n2. Scroll down and choose “Add to Home Screen”\n3. Tap “Add” at the top right\n\nSafari is recommended for this page.",
+otherMsg:"Open the browser menu (⋮ at the top right) and choose “Install app” or “Add to Home Screen”.\n\nIf you don’t see it, open this page in Chrome or Safari.",
+alreadyInst:"Chronicle is already on your Home Screen",installedToast:"Chronicle installed",
+wdS:["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],
+wdL:["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],
+monS:["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],
+monL:["January","February","March","April","May","June","July","August","September","October","November","December"]
+}};
+function lx(k){var s=I18N[LG][k];if(s==null)s=I18N.zh[k];if(typeof s==='string')for(var i=1;i<arguments.length;i++)s=s.replace('{'+(i-1)+'}',arguments[i]);return s}
+function fmtLong(y,m,d){return LG==='zh'?y+'年'+(m+1)+'月'+d+'日':lx('monS')[m]+' '+d+', '+y}
+function fmtMonth(y,m){return LG==='zh'?y+'年'+(m+1)+'月':lx('monL')[m]+' '+y}
+function fmtMD(m,d,w){return LG==='zh'?(m+1)+'月'+d+'日 '+lx('wdL')[w]:lx('wdS')[w]+', '+lx('monS')[m]+' '+d}
+var langHooks=[];
+function applyStatic(){
+  document.documentElement.lang=LG==='zh'?'zh-Hant':'en';
+  Array.prototype.forEach.call(document.querySelectorAll('[data-i18n]'),function(e){e.textContent=lx(e.dataset.i18n)});
+  Array.prototype.forEach.call(document.querySelectorAll('[data-i18n-ph]'),function(e){e.placeholder=lx(e.dataset.i18nPh)});
+  Array.prototype.forEach.call(document.querySelectorAll('[data-i18n-aria]'),function(e){e.setAttribute('aria-label',lx(e.dataset.i18nAria))});
+  Array.prototype.forEach.call(document.querySelectorAll('[data-i18n-alt]'),function(e){e.alt=lx(e.dataset.i18nAlt)});
+  var lg=document.getElementById('lang');
+  if(lg){lg.style.setProperty('--li',LG==='zh'?0:1);Array.prototype.forEach.call(lg.children,function(b){b.setAttribute('aria-pressed',b.dataset.l===LG?'true':'false')})}}
+applyStatic();
 function two(n){return n<10?'0'+n:''+n}
 function dk(d){return d.getFullYear()+'-'+two(d.getMonth()+1)+'-'+two(d.getDate())}
 function esc(s){return s.replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
-function head(){var n=new Date();$('date').textContent=n.getFullYear()+'年'+(n.getMonth()+1)+'月'+n.getDate()+'日';$('week').textContent='星期'+W[n.getDay()]}
+function head(){var n=new Date();$('date').textContent=fmtLong(n.getFullYear(),n.getMonth(),n.getDate());$('week').textContent=lx('wdL')[n.getDay()]}
 head();
 
 /* 鎖定頁面縮放（只有課程表全螢幕內可縮放） */
@@ -413,23 +505,23 @@ head();
 
 var tt;function toast(m){var t=$('toast');t.textContent=m;t.classList.add('on');clearTimeout(tt);tt=setTimeout(function(){t.classList.remove('on')},1700)}
 var yes=null;
-function ask(a,b,fn,lb){$('ay').textContent=lb||'刪除';$('at').textContent=a;$('ap').textContent=b;yes=fn;$('al').classList.add('on')}
+function ask(a,b,fn,lb){$('ay').textContent=lb||lx('del');$('at').textContent=a;$('ap').textContent=b;yes=fn;$('al').classList.add('on')}
 $('an').onclick=function(){$('al').classList.remove('on');yes=null};
 $('ay').onclick=function(){$('al').classList.remove('on');var f=yes;yes=null;if(f)f()};
 
 /* IndexedDB */
 var dbp=new Promise(function(res,rej){try{var r=indexedDB.open('planner-db',1);r.onupgradeneeded=function(){r.result.createObjectStore('kv')};r.onsuccess=function(){res(r.result)};r.onerror=function(){rej(r.error)}}catch(e){rej(e)}});
 function idb(m,fn){return dbp.then(function(db){return new Promise(function(res,rej){var tx=db.transaction('kv',m),q=fn(tx.objectStore('kv'));tx.oncomplete=function(){res(q&&q.result)};tx.onerror=function(){rej(tx.error)}})})}
-var url=null,turl=null,fullBlob=null;
+var url=null,turl=null,fullBlob=null,curT=null;
 function fullURL(){return url||(url=fullBlob?URL.createObjectURL(fullBlob):'')}
-function showTT(b,t){
+function showTT(b,t){curT=t||null;
   if(url){URL.revokeObjectURL(url);url=null}
   if(turl){URL.revokeObjectURL(turl);turl=null}
   fullBlob=b;
   var el=$('tt');
-  if(!b){el.innerHTML='<button class="up" id="up"><span class="ico">'+ic('cam')+'</span><span><b>上傳課程表</b><span>拍照或從相簿選取</span></span></button>';$('up').onclick=pick;return}
+  if(!b){el.innerHTML='<button class="up" id="up"><span class="ico">'+ic('cam')+'</span><span><b>'+lx('uploadTT')+'</b><span>'+lx('uploadSub')+'</span></span></button>';$('up').onclick=pick;return}
   turl=URL.createObjectURL(t||b);
-  el.innerHTML='<button class="thumb" id="th"><img src="'+turl+'" alt="課程表" decoding="async"><em>'+ic('zoom')+'全螢幕查看</em></button><div class="acts"><button id="op">'+ic('zoom')+'放大查看</button><button id="rp">'+ic('img')+'更換</button><button class="r" id="rm">'+ic('trash')+'刪除</button></div>';
+  el.innerHTML='<button class="thumb" id="th"><img src="'+turl+'" alt="'+lx('ttAlt')+'" decoding="async"><em>'+ic('zoom')+lx('fullView')+'</em></button><div class="acts"><button id="op">'+ic('zoom')+lx('zoomView')+'</button><button id="rp">'+ic('img')+lx('replace')+'</button><button class="r" id="rm">'+ic('trash')+lx('del')+'</button></div>';
   var i0=el.querySelector('img');i0.onerror=function(){i0.onerror=null;i0.src=fullURL()};
   $('th').onclick=$('op').onclick=openV;$('rp').onclick=pick;$('rm').onclick=delTT}
 function pick(){$('file').value='';$('file').click()}
@@ -442,13 +534,13 @@ function prepTT(f,cb){withImg(f,function(im,end){
 $('file').onchange=function(){var f=this.files&&this.files[0];if(!f)return;
   prepTT(f,function(full,th){
     Promise.all([idb('readwrite',function(s){return s.put(full,'timetable')}),idb('readwrite',function(s){return s.put(th,'timetable-t')})]).then(function(){
-      showTT(full,th);if($('viewer').classList.contains('on')){$('vimg').src=fullURL();resetV()}toast('課程表已儲存')}).catch(function(){toast('儲存失敗，請再試一次')})})};
-function delTT(){ask('刪除課程表？','刪除後需要重新上傳相片。',function(){Promise.all([idb('readwrite',function(s){return s.delete('timetable')}),idb('readwrite',function(s){return s.delete('timetable-t')})]).then(function(){closeV();showTT(null);toast('已刪除課程表')})})}
+      showTT(full,th);if($('viewer').classList.contains('on')){$('vimg').src=fullURL();resetV()}toast(lx('ttSaved'))}).catch(function(){toast(lx('saveFail'))})})};
+function delTT(){ask(lx('delTTTitle'),lx('delTTMsg'),function(){Promise.all([idb('readwrite',function(s){return s.delete('timetable')}),idb('readwrite',function(s){return s.delete('timetable-t')})]).then(function(){closeV();showTT(null);toast(lx('ttDeleted'))})})}
 Promise.all([idb('readonly',function(s){return s.get('timetable')}),idb('readonly',function(s){return s.get('timetable-t')})]).then(function(r){
   var b=r[0],t=r[1];if(!b){showTT(null);return}
   showTT(b,t);
   if(!t)setTimeout(function(){ /* 舊資料：背景補做縮圖，之後打開就唔使再解碼大圖 */
-    withImg(b,function(im,end){toBlob(im,1200,.82,function(nt){end();if(!nt)return;idb('readwrite',function(s){return s.put(nt,'timetable-t')}).then(function(){if(fullBlob===b){var o=turl;turl=URL.createObjectURL(nt);var i=document.querySelector('#th img');if(i)i.src=turl;if(o)URL.revokeObjectURL(o)}})})},function(){})},600)
+    withImg(b,function(im,end){toBlob(im,1200,.82,function(nt){end();if(!nt)return;idb('readwrite',function(s){return s.put(nt,'timetable-t')}).then(function(){if(fullBlob===b){curT=nt;var o=turl;turl=URL.createObjectURL(nt);var i=document.querySelector('#th img');if(i)i.src=turl;if(o)URL.revokeObjectURL(o)}})})},function(){})},600)
 }).catch(function(){showTT(null)});
 
 /* 全螢幕查看 */
@@ -473,13 +565,13 @@ function up(e){ptr.delete(e.pointerId);last=ptr.size===2?pi():null}
 st.addEventListener('pointerup',up);st.addEventListener('pointercancel',up);
 
 /* 資料 */
-var TAGS=[{id:'hw',n:'功課作業',c:'#007aff'},{id:'ex',n:'考試測驗',c:'#ff3b30'},{id:'me',n:'個人行程',c:'#30b0c7'},{id:'td',n:'待辦事項',c:'#ff9500'}];
-var PN={h:'高',m:'中',l:'低'};
-$('tags').innerHTML=TAGS.map(function(t,i){return '<label class="chip" style="--c:'+t.c+'"><input type="radio" name="tag" value="'+t.id+'"'+(i?'':' checked')+'><span>'+t.n+'</span></label>'}).join('');
+var TAGS=[{id:'hw',c:'#007aff'},{id:'ex',c:'#ff3b30'},{id:'me',c:'#30b0c7'},{id:'td',c:'#ff9500'}];
+function tn(g){return lx('tag_'+g.id)}
+$('tags').innerHTML=TAGS.map(function(t,i){return '<label class="chip" style="--c:'+t.c+'"><input type="radio" name="tag" value="'+t.id+'"'+(i?'':' checked')+'><span>'+tn(t)+'</span></label>'}).join('');
 function okT(t){return t&&typeof t.when==='string'&&typeof t.title==='string'}
 var tasks=[];try{tasks=JSON.parse(localStorage.getItem('planner-tasks')||'[]')}catch(e){}
 if(!Array.isArray(tasks))tasks=[];tasks=tasks.filter(okT);
-function save(){try{localStorage.setItem('planner-tasks',JSON.stringify(tasks))}catch(e){toast('無法儲存資料')}}
+function save(){try{localStorage.setItem('planner-tasks',JSON.stringify(tasks))}catch(e){toast(lx('cantSave'))}}
 function tg(id){return TAGS.filter(function(x){return x.id===id})[0]||TAGS[0]}
 var now=new Date(),sel=dk(now),cy=now.getFullYear(),cm=now.getMonth(),filter='all';
 var popId=null,animList=false;
@@ -489,7 +581,7 @@ function mo(){return !(window.matchMedia&&matchMedia('(prefers-reduced-motion:re
 function monthHTML(y,m){
   var first=new Date(y,m,1).getDay(),days=new Date(y,m+1,0).getDate(),today=dk(new Date()),by={};
   tasks.forEach(function(t){var k=t.when.slice(0,10);(by[k]=by[k]||[]).push(t)});
-  var h=W.map(function(w){return '<div class="wd">'+w+'</div>'}).join('');
+  var h=lx('wdS').map(function(w){return '<div class="wd">'+w+'</div>'}).join('');
   for(var i=0;i<first;i++)h+='<div class="dy out"></div>';
   for(var d=1;d<=days;d++){
     var k=y+'-'+two(m+1)+'-'+two(d),a=(by[k]||[]).filter(function(t){return!t.done}),seen=[],dots='';
@@ -499,7 +591,7 @@ function monthHTML(y,m){
   return h}
 var gv=$('gv'),gt=$('gt'),busy=false,finFn=null,nbOK=false,nbT=0,EASE='cubic-bezier(.32,.72,0,1)';
 function drawCal(){
-  $('mt').textContent=cy+'年'+(cm+1)+'月';
+  $('mt').textContent=fmtMonth(cy,cm);
   $('grid').innerHTML=monthHTML(cy,cm);
   nbOK=false;clearTimeout(nbT);nbT=setTimeout(function(){if(!busy&&!nbOK)fillNb()},250)}
 function adj(d){var m=cm+d,y=cy;if(m<0){m=11;y--}else if(m>11){m=0;y++}return[y,m]}
@@ -512,7 +604,7 @@ function run(ty,tm,dir,done){
   gv.style.transition='none';gv.style.height=h0+'px';void gt.offsetWidth;
   gv.style.transition='height .45s '+EASE;gv.style.height=h1+'px';
   gt.style.willChange='transform';gt.style.transition='transform .45s '+EASE;gt.style.transform='translate3d('+(-dir*100)+'%,0,0)';
-  $('mt').textContent=ty+'年'+(tm+1)+'月';
+  $('mt').textContent=fmtMonth(ty,tm);
   var ended=false,to;
   function fin(){if(ended)return;ended=true;clearTimeout(to);gt.removeEventListener('transitionend',te);
     gt.style.transition='none';gt.style.transform='';gt.style.willChange='';gv.style.transition='none';gv.style.height='';
@@ -540,37 +632,37 @@ $('today').onclick=function(){if(busy&&finFn)finFn();var n=new Date(),ty=n.getFu
 /* 當天清單 */
 function renderList(){
   var p=sel.split('-'),d=new Date(+p[0],p[1]-1,+p[2]),t0=dk(new Date());
-  $('dl').textContent=(sel===t0?'今天 · ':'')+(+p[1])+'月'+(+p[2])+'日 星期'+W[d.getDay()]+(impSet[sel]?' · 重要：'+impSet[sel]:'');
+  $('dl').textContent=(sel===t0?lx('todayDot'):'')+fmtMD(+p[1]-1,+p[2],d.getDay())+(impSet[sel]?lx('impLabel')+impSet[sel]:'');
   var all=tasks.filter(function(t){return t.when.slice(0,10)===sel}).sort(function(a,b){return a.when<b.when?-1:1});
-  $('cnt').textContent=all.length?all.filter(function(t){return!t.done}).length+' 項未完成':'';
+  $('cnt').textContent=all.length?lx('pendingN',all.filter(function(t){return!t.done}).length):'';
   var l=all.filter(function(t){return filter==='all'||(filter==='done')===t.done});
-  if(!l.length)$('list').innerHTML='<div class="empty">'+(all.length?'沒有符合的事項':'這天沒有事項，按「新增事項」記錄吧')+'</div>';
+  if(!l.length)$('list').innerHTML='<div class="empty">'+(all.length?lx('noMatch'):lx('emptyDay'))+'</div>';
   else $('list').innerHTML=l.map(function(t){var g=tg(t.tag);
-    return '<div class="item'+(t.done?' done':'')+(t.id===popId?' pop':'')+'" data-id="'+t.id+'" style="--c:'+g.c+'"><button class="ck" data-a="t" data-id="'+t.id+'" aria-label="切換完成狀態">'+ic('ck')+'</button><div class="bd"><div class="t">'+esc(t.title)+'</div><div class="m"><span>'+t.when.slice(11,16)+'</span><span class="tg">'+g.n+'</span>'+(t.p==='h'?'<span class="hi">高優先</span>':t.p==='m'?'<span>中優先</span>':t.p==='l'?'<span>低優先</span>':'')+'</div>'+(t.note?'<div class="nt">'+esc(t.note)+'</div>':'')+'</div><button class="del" data-a="d" data-id="'+t.id+'" aria-label="刪除">'+ic('trash')+'</button></div>'}).join('');
+    return '<div class="item'+(t.done?' done':'')+(t.id===popId?' pop':'')+'" data-id="'+t.id+'" style="--c:'+g.c+'"><button class="ck" data-a="t" data-id="'+t.id+'" aria-label="'+lx('toggleDone')+'">'+ic('ck')+'</button><div class="bd"><div class="t">'+esc(t.title)+'</div><div class="m"><span>'+t.when.slice(11,16)+'</span><span class="tg">'+tn(g)+'</span>'+(t.p==='h'?'<span class="hi">'+lx('prHigh')+'</span>':t.p==='m'?'<span>'+lx('prMid')+'</span>':t.p==='l'?'<span>'+lx('prLow')+'</span>':'')+'</div>'+(t.note?'<div class="nt">'+esc(t.note)+'</div>':'')+'</div><button class="del" data-a="d" data-id="'+t.id+'" aria-label="'+lx('del')+'">'+ic('trash')+'</button></div>'}).join('');
   popId=null;
   if(animList){animList=false;if(mo()&&$('list').animate)$('list').animate([{opacity:0,transform:'translateY(10px)'},{opacity:1,transform:'none'}],{duration:360,easing:'cubic-bezier(.2,.8,.2,1)'})}}
 function render(){renderList();drawCal()}
 $('tabs').onclick=function(e){var b=e.target.closest('button');if(!b)return;filter=b.dataset.f;this.style.setProperty('--i',Array.prototype.indexOf.call(this.children,b));Array.prototype.forEach.call(this.children,function(x){x.classList.toggle('on',x===b)});renderList()};
 $('list').onclick=function(e){var b=e.target.closest('button[data-a]');if(!b)return;var id=b.dataset.id;
   if(b.dataset.a==='t'){tasks.forEach(function(t){if(t.id===id)t.done=!t.done});save();popId=id;render()}
-  else ask('刪除這個事項？','刪除後無法復原。',function(){tasks=tasks.filter(function(t){return t.id!==id});save();render();toast('已刪除')})};
+  else ask(lx('delTaskTitle'),lx('delTaskMsg'),function(){tasks=tasks.filter(function(t){return t.id!==id});save();render();toast(lx('deleted'))})};
 
 /* 新增表單 */
 function sheet(on){$('sheet').classList.toggle('on',on);$('ov').classList.toggle('on',on);if(on)setTimeout(function(){$('title').focus()},320)}
 var editId=null;
-function resetForm(){editId=null;$('title').value='';$('note').value='';$('stt').textContent='新增事項';$('sv').textContent='加入';
+function resetForm(){editId=null;$('title').value='';$('note').value='';$('stt').textContent=lx('newTask');$('sv').textContent=lx('add');
   document.querySelector('input[name=tag]').checked=true;document.querySelector('input[name=p][value=n]').checked=true}
 function editTask(id){var t=tasks.filter(function(x){return x.id===id})[0];if(!t)return;resetForm();editId=id;
-  $('stt').textContent='編輯事項';$('sv').textContent='儲存';$('title').value=t.title;$('td2').value=t.when.slice(0,10);$('tm').value=t.when.slice(11,16)||'09:00';$('note').value=t.note||'';
+  $('stt').textContent=lx('editTask');$('sv').textContent=lx('save');$('title').value=t.title;$('td2').value=t.when.slice(0,10);$('tm').value=t.when.slice(11,16)||'09:00';$('note').value=t.note||'';
   var a=document.querySelector('input[name=tag][value='+t.tag+']'),b=document.querySelector('input[name=p][value='+(t.p||'n')+']');if(a)a.checked=true;if(b)b.checked=true;sheet(true)}
 $('fab').onclick=function(){if(editId)resetForm();$('td2').value=sel;var n=new Date();$('tm').value=sel===dk(n)?two((n.getHours()+1)%24)+':00':'09:00';sheet(true)};
 $('sc').onclick=$('ov').onclick=function(){sheet(false);document.activeElement&&document.activeElement.blur()};
-$('sv').onclick=function(){var t=$('title').value.trim();if(!t){toast('請輸入事項名稱');$('title').focus();return}
+$('sv').onclick=function(){var t=$('title').value.trim();if(!t){toast(lx('enterTitle'));$('title').focus();return}
   var d=$('td2').value||sel,o={when:d+'T'+($('tm').value||'09:00'),title:t,tag:document.querySelector('input[name=tag]:checked').value,p:document.querySelector('input[name=p]:checked').value,note:$('note').value.trim()},ed=editId;
   if(ed)tasks.forEach(function(x){if(x.id===ed)for(var k in o)x[k]=o[k]});
   else tasks.push(Object.assign({id:Date.now()+''+Math.floor(Math.random()*999),done:false},o));
   if(d!==sel){sel=d;var q=d.split('-');cy=+q[0];cm=+q[1]-1}
-  save();resetForm();sheet(false);animList=true;render();toast(ed?'已儲存修改':'已加入備忘錄')};
+  save();resetForm();sheet(false);animList=true;render();toast(ed?lx('savedEdit'):lx('addedTask'))};
 $('title').onkeydown=function(e){if(e.key==='Enter'){e.preventDefault();$('sv').click()}};
 document.addEventListener('keydown',function(e){if(e.key==='Escape'){if($('viewer').classList.contains('on'))closeV();else sheet(false)}});
 var gAlpha=.7;try{var gs=localStorage.getItem('planner-glass');if(gs!==null&&!isNaN(+gs))gAlpha=+gs}catch(e){}
@@ -605,9 +697,9 @@ function pickBg(){$('bgfile').value='';$('bgfile').click()}
 $('bgs').onclick=function(e){var b=e.target.closest('button');if(!b)return;if(b.dataset.b==='photo'&&!bgURL){pickBg();return}setBgMode(b.dataset.b)};
 $('bgpick').onclick=pickBg;
 $('bgfile').onchange=function(){var f=this.files&&this.files[0];if(!f)return;
-  shrinkImg(f,function(d){if(!d){toast('讀取相片失敗，請再試');return}var t=new Image();t.onerror=function(){toast('呢張相片格式唔支援，請換另一張')};t.src=d;setBgBlob(d);setBgMode('photo');
-    idb('readwrite',function(s){return s.put(d,'bg')}).then(function(){toast('背景已更新')}).catch(function(){toast('已套用，但未能永久儲存')})})};
-$('bgdel').onclick=function(){idb('readwrite',function(s){return s.delete('bg')}).then(function(){setBgBlob(null);setBgMode('color');toast('已移除背景照片')})};
+  shrinkImg(f,function(d){if(!d){toast(lx('readPhotoFail'));return}var t=new Image();t.onerror=function(){toast(lx('photoUnsupported'))};t.src=d;setBgBlob(d);setBgMode('photo');
+    idb('readwrite',function(s){return s.put(d,'bg')}).then(function(){toast(lx('bgUpdated'))}).catch(function(){toast(lx('bgNotPersist'))})})};
+$('bgdel').onclick=function(){idb('readwrite',function(s){return s.delete('bg')}).then(function(){setBgBlob(null);setBgMode('color');toast(lx('bgRemoved'))})};
 idb('readonly',function(s){return s.get('bg')}).then(function(b){
   if(b&&typeof b!=='string'){readData(b,function(d){if(d){setBgBlob(d);applyBg();idb('readwrite',function(s){return s.put(d,'bg')})}else applyBg()});return} /* 上一版存咗 Blob：轉返字串 */
   if(b)setBgBlob(b);applyBg()}).catch(applyBg);
@@ -629,31 +721,31 @@ window.addEventListener('scroll',function(){clearTimeout(lpT);lpT=0},{passive:tr
 document.addEventListener('click',function(e){if(lpDone){lpDone=false;e.stopPropagation();e.preventDefault()}},true);
 document.addEventListener('contextmenu',function(e){if(e.target.closest('.item'))e.preventDefault()});
 /* 備份 */
-$('bkx').onclick=function(){var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify({v:1,tasks:tasks,days:idays})],{type:'application/json'}));a.download='planner-backup-'+dk(new Date())+'.json';document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(a.href)},4000);toast('已匯出備份')};
+$('bkx').onclick=function(){var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify({v:1,tasks:tasks,days:idays})],{type:'application/json'}));a.download='planner-backup-'+dk(new Date())+'.json';document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(a.href)},4000);toast(lx('exported'))};
 $('bki').onclick=function(){$('bkf').value='';$('bkf').click()};
 $('bkf').onchange=function(){var f=this.files&&this.files[0];if(!f)return;var r=new FileReader();
-  r.onload=function(){var d;try{d=JSON.parse(r.result);if(!Array.isArray(d.tasks))throw 0}catch(e){toast('備份檔案無效');return}
-    ask('匯入備份？','會取代目前所有事項與重要日子。',function(){tasks=d.tasks.filter(okT);idays=Array.isArray(d.days)?d.days:[];save();saveD();drawDays();render();toast('已匯入備份')},'匯入')};
+  r.onload=function(){var d;try{d=JSON.parse(r.result);if(!Array.isArray(d.tasks))throw 0}catch(e){toast(lx('invalidBackup'));return}
+    ask(lx('importAsk'),lx('importMsg'),function(){tasks=d.tasks.filter(okT);idays=Array.isArray(d.days)?d.days:[];save();saveD();drawDays();render();toast(lx('imported'))},lx('importOk'))};
   r.readAsText(f)};
 
 /* 重要日子 */
 var idays=[],impSet={};
 try{idays=JSON.parse(localStorage.getItem('planner-days')||'[]')}catch(e){}
 if(!Array.isArray(idays))idays=[];
-function saveD(){try{localStorage.setItem('planner-days',JSON.stringify(idays))}catch(e){toast('無法儲存資料')}}
+function saveD(){try{localStorage.setItem('planner-days',JSON.stringify(idays))}catch(e){toast(lx('cantSave'))}}
 function dd(k){var p=k.split('-'),n=new Date();return Math.round((new Date(+p[0],p[1]-1,+p[2])-new Date(n.getFullYear(),n.getMonth(),n.getDate()))/864e5)}
 function drawDays(){
-  impSet={};idays.forEach(function(x){impSet[x.date]=impSet[x.date]?impSet[x.date]+'、'+x.name:x.name});
+  impSet={};idays.forEach(function(x){impSet[x.date]=impSet[x.date]?impSet[x.date]+lx('sep')+x.name:x.name});
   var l=idays.slice().sort(function(a,b){var da=dd(a.date),db=dd(b.date);return (da<0)-(db<0)||(da<0?db-da:da-db)});
   $('days').innerHTML=l.length?l.map(function(x){var n=dd(x.date),p=x.date.split('-');
-    return '<div class="dayi'+(n<0?' past':'')+'"><div class="dn"><b>'+(n===0?'今天':Math.abs(n))+'</b><small>'+(n===0?'':n>0?'天後':'天前')+'</small></div><div class="bd"><div class="t">'+esc(x.name)+'</div><div class="m"><span>'+p[0]+'年'+(+p[1])+'月'+(+p[2])+'日</span></div></div><button class="del" data-id="'+x.id+'" aria-label="刪除">'+ic('trash')+'</button></div>'}).join(''):'<div class="empty">加入考試、生日、旅行等重要日子，這裡會顯示倒數</div>'}
+    return '<div class="dayi'+(n<0?' past':'')+'"><div class="dn"><b>'+(n===0?lx('today'):Math.abs(n))+'</b><small>'+(n===0?'':n>0?lx(n===1?'dayLeft1':'daysLeft'):lx(n===-1?'dayAgo1':'daysAgo'))+'</small></div><div class="bd"><div class="t">'+esc(x.name)+'</div><div class="m"><span>'+fmtLong(+p[0],+p[1]-1,+p[2])+'</span></div></div><button class="del" data-id="'+x.id+'" aria-label="'+lx('del')+'">'+ic('trash')+'</button></div>'}).join(''):'<div class="empty">'+lx('emptyDays')+'</div>'}
 $('days').onclick=function(e){var b=e.target.closest('button[data-id]');if(!b)return;var id=b.dataset.id;
-  ask('刪除這個重要日子？','刪除後無法復原。',function(){idays=idays.filter(function(x){return x.id!==id});saveD();drawDays();drawCal();toast('已刪除')})};
+  ask(lx('delDayTitle'),lx('delTaskMsg'),function(){idays=idays.filter(function(x){return x.id!==id});saveD();drawDays();drawCal();toast(lx('deleted'))})};
 function dayS(on){$('ds').classList.toggle('on',on);$('ov').classList.toggle('on',on);if(on)setTimeout(function(){$('dname').focus()},320)}
 $('addDay').onclick=function(){$('ddate').value=sel;dayS(true)};
 $('dc').onclick=function(){dayS(false)};
-$('dsv').onclick=function(){var n=$('dname').value.trim(),d=$('ddate').value;if(!n){toast('請輸入名稱');$('dname').focus();return}if(!d){toast('請選擇日期');return}
-  idays.push({id:Date.now()+''+Math.floor(Math.random()*999),name:n,date:d});saveD();$('dname').value='';dayS(false);drawDays();drawCal();toast('已加入重要日子')};
+$('dsv').onclick=function(){var n=$('dname').value.trim(),d=$('ddate').value;if(!n){toast(lx('enterName'));$('dname').focus();return}if(!d){toast(lx('pickDate'));return}
+  idays.push({id:Date.now()+''+Math.floor(Math.random()*999),name:n,date:d});saveD();$('dname').value='';dayS(false);drawDays();drawCal();toast(lx('dayAdded'))};
 drawDays();
 /* 滑動手勢：分段控制按住滑動切換、月曆左右滑動換月 */
 (function(){
@@ -694,8 +786,8 @@ drawDays();
   h.addEventListener('pointerup',end);h.addEventListener('pointercancel',end)});
 /* ===== 動態手感：版本號、橡皮筋拉扯、滾動彈性 ===== */
 (function(){
-  var APP_VER='1.4.0',APP_DATE='2026-10-23';
-  var ve=document.getElementById('ver');if(ve)ve.textContent='v'+APP_VER+'（'+APP_DATE+'）';
+  var APP_VER='1.5.0',APP_DATE='2026-10-23';
+  var ve=document.getElementById('ver');if(ve)ve.textContent='v'+APP_VER+' ('+APP_DATE+')';
   var RM=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
   var wrap=document.querySelector('.wrap'),fab=document.getElementById('fab'),h1=document.getElementById('date'),de=document.documentElement;
   Array.prototype.forEach.call(wrap.children,function(el,i){el.style.setProperty('--n',i)});
@@ -758,19 +850,29 @@ drawDays();
   var standalone=function(){return (window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true};
   var ios=/iphone|ipad|ipod/i.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
   function info(t,p){$('it').textContent=t;$('ip').textContent=p;ial.classList.add('on')}
-  function refresh(){if(standalone()){st.textContent='已安裝';btn.textContent='已安裝在主畫面'}else{st.textContent='';btn.textContent='安裝到主畫面'}}
+  function refresh(){if(standalone()){st.textContent=lx('installed');btn.textContent=lx('installedBtn')}else{st.textContent='';btn.textContent=lx('installBtn')}}
   window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();dp=e});
-  window.addEventListener('appinstalled',function(){dp=null;refresh();toast('已安裝 Chronicle')});
+  window.addEventListener('appinstalled',function(){dp=null;refresh();toast(lx('installedToast'))});
   $('iok').onclick=function(){ial.classList.remove('on')};
   btn.onclick=function(){
-    if(standalone()){toast('Chronicle 已安裝在主畫面');return}
+    if(standalone()){toast(lx('alreadyInst'));return}
     if(dp){dp.prompt();dp.userChoice.then(function(){dp=null}).catch(function(){});return}
-    if(ios){info('安裝到主畫面','1. 點底部的「分享」按鈕（方框加向上箭頭）\n2. 向下滑，選「加入主畫面」\n3. 按右上角「加入」\n\n建議使用 Safari 開啟此頁。');return}
-    info('安裝到主畫面','請打開瀏覽器選單（右上角 ⋮），選「安裝應用程式」或「加到主畫面」。\n\n若沒有此選項，請改用 Chrome 或 Safari 開啟。');
+    if(ios){info(lx('installTitle'),lx('iosMsg'));return}
+    info(lx('installTitle'),lx('otherMsg'));
   };
-  refresh();
+  refresh();langHooks.push(refresh);
 })();
 document.addEventListener('visibilitychange',function(){if(!document.hidden){head();render()}});
+/* 語言切換 */
+function setLang(l){
+  if(l===LG||!I18N[l])return;
+  LG=l;try{localStorage.setItem('planner-lang',l)}catch(e){}
+  applyStatic();
+  $('stt').textContent=lx(editId?'editTask':'newTask');$('sv').textContent=lx(editId?'save':'add');
+  Array.prototype.forEach.call($('tags').querySelectorAll('span'),function(s,i){s.textContent=tn(TAGS[i])});
+  head();showTT(fullBlob,curT);drawDays();render();
+  langHooks.forEach(function(f){f()})}
+$('lang').onclick=function(e){var b=e.target.closest('button[data-l]');if(b)setLang(b.dataset.l)};
 render();
 })();
 </script>
