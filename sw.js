@@ -1,5 +1,5 @@
 /* Chronicle service worker：先用快取、背景更新（有新版本下次開啟就會換上） */
-const CACHE = 'chronicle-v1.5.0';
+const CACHE = 'chronicle-v2.0.0';
 const ASSETS = [
   './', './index.html', './manifest.webmanifest',
   './icons/apple-touch-icon.png', './icons/icon-192.png',
