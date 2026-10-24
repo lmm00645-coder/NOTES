@@ -589,7 +589,7 @@ box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:en
   <div class="gh" data-i18n="backup">資料備份</div>
   <div class="fld"><div class="fr"><button class="lk" id="bkx" data-i18n="export">匯出備份</button><button class="lk" id="bki" data-i18n="import">匯入備份</button></div></div><input type="file" id="bkf" accept=".json,application/json" hidden>
   <div class="gh" data-i18n="about">關於</div>
-  <div class="fld"><div class="fr"><label data-i18n="version">版本</label><span class="ver" id="ver"></span></div><div class="fr"><button class="lk" id="tosb" data-i18n="tos">使用條款與免責聲明</button></div></div>
+  <div class="fld"><div class="fr" id="verrow"><label data-i18n="version">版本</label><span class="ver" id="ver"></span></div><div class="fr"><button class="lk" id="tosb" data-i18n="tos">使用條款與免責聲明</button></div></div>
 </div>
 <div class="sheet" id="ds">
   <div class="sh"><button id="dc" data-i18n="cancel">取消</button><b data-i18n="newDay">新增重要日子</b><button class="sv" id="dsv" data-i18n="add">加入</button></div>
@@ -623,7 +623,7 @@ var LG='zh';
 try{var _sl=localStorage.getItem('planner-lang');if(_sl==='zh'||_sl==='en')LG=_sl;else LG=/^zh/i.test(navigator.language||'zh')?'zh':'en'}catch(e){}
 var I18N={
 zh:{
-settings:"設定",tos:"使用條款與免責聲明",tosBody:"1. 資料隱私與本機儲存：本網站為純前端本地運作應用（Local-first）。所有課表、行程日程、備忘錄及上傳之照片，均完整儲存於使用者本身的瀏覽器內部（LocalStorage 及 IndexedDB），不會上傳至任何遠端伺服器，開發者亦不會收集、傳輸或查閱任何個人資料。\n\n2. 免責聲明：本網站按「現狀」（As-Is）免費提供個人日常學習與日程整理參考。因使用者清除瀏覽器暫存、更換裝置、系統故障或不可抗力因素導致的資料遺失，開發者恕不承擔任何直接或間接之損失責任，建議使用者定期利用「資料備份」功能匯出檔案留存。\n\n3. AI 協作聲明：本專案之程式代碼、視覺介面與圖標均由人工架構引導並經由人工智慧（AI）輔助生成。",style:"風格",styleGlass:"液態玻璃",styleSwiss:"瑞士極簡",timetable:"課程表",calendar:"月曆",today:"今天",prevM:"上個月",nextM:"下個月",
+settings:"設定",tos:"使用條款與免責聲明",visTitle:"造訪人數",visMsg:"累計約 {0} 位使用者曾開啟本網站。\n\n以瀏覽器計算，清除瀏覽器資料後重新開啟會再計一次。",visFail:"暫時無法取得造訪人數，請確認網絡後再試",tosBody:"1. 資料隱私與本機儲存：本網站為純前端本地運作應用（Local-first）。所有課表、行程日程、備忘錄及上傳之照片，均完整儲存於使用者本身的瀏覽器內部（LocalStorage 及 IndexedDB），不會上傳至任何遠端伺服器，開發者亦不會收集、傳輸或查閱任何個人資料。唯一例外：為統計造訪人數，首次開啟時本網站會向第三方計數服務（CounterAPI）發送一次匿名的「+1」請求，內容不含任何個人資料或你儲存的事項。\n\n2. 免責聲明：本網站按「現狀」（As-Is）免費提供個人日常學習與日程整理參考。因使用者清除瀏覽器暫存、更換裝置、系統故障或不可抗力因素導致的資料遺失，開發者恕不承擔任何直接或間接之損失責任，建議使用者定期利用「資料備份」功能匯出檔案留存。\n\n3. AI 協作聲明：本專案之程式代碼、視覺介面與圖標均由人工架構引導並經由人工智慧（AI）輔助生成。",style:"風格",styleGlass:"液態玻璃",styleSwiss:"瑞士極簡",timetable:"課程表",calendar:"月曆",today:"今天",prevM:"上個月",nextM:"下個月",
 tabAll:"全部",tabPending:"未完成",tabDone:"已完成",important:"重要日子",addNew:"＋ 新增",
 newTask:"新增事項",editTask:"編輯事項",cancel:"取消",add:"加入",save:"儲存",finish:"完成",
 phTitle:"事項名稱，例如：數學作業",date:"日期",time:"時間",priority:"優先程度",
@@ -658,7 +658,7 @@ wdL:["星期日","星期一","星期二","星期三","星期四","星期五","�
 monS:[],monL:[]
 },
 en:{
-settings:"Settings",tos:"Terms of Use & Disclaimer",tosBody:"1. Data privacy and local storage: This is a local-first, front-end-only app. All timetables, schedules, notes and uploaded photos are stored entirely inside your own browser (LocalStorage and IndexedDB). Nothing is uploaded to any remote server, and the developer does not collect, transmit or view any personal data.\n\n2. Disclaimer: This site is provided free of charge, “as is”, as a reference for personal study and schedule organising. The developer accepts no liability for any direct or indirect loss arising from data loss caused by clearing browser data, changing devices, system failures or force majeure. Please use “Export Backup” regularly to keep a copy of your data.\n\n3. AI collaboration notice: The code, interface and icons of this project were architected under human direction and generated with the assistance of artificial intelligence (AI).",style:"Style",styleGlass:"Liquid Glass",styleSwiss:"Swiss",timetable:"Timetable",calendar:"Calendar",today:"Today",prevM:"Previous month",nextM:"Next month",
+settings:"Settings",tos:"Terms of Use & Disclaimer",visTitle:"Visitors",visMsg:"About {0} people have opened this site.\n\nCounted per browser; clearing browser data and reopening counts again.",visFail:"Couldn’t get the visitor count. Check your connection and try again.",tosBody:"1. Data privacy and local storage: This is a local-first, front-end-only app. All timetables, schedules, notes and uploaded photos are stored entirely inside your own browser (LocalStorage and IndexedDB). Nothing is uploaded to any remote server, and the developer does not collect, transmit or view any personal data. The only exception: to count visitors, the first time you open the site it sends one anonymous “+1” request to a third-party counting service (CounterAPI), containing no personal data and none of your stored items.\n\n2. Disclaimer: This site is provided free of charge, “as is”, as a reference for personal study and schedule organising. The developer accepts no liability for any direct or indirect loss arising from data loss caused by clearing browser data, changing devices, system failures or force majeure. Please use “Export Backup” regularly to keep a copy of your data.\n\n3. AI collaboration notice: The code, interface and icons of this project were architected under human direction and generated with the assistance of artificial intelligence (AI).",style:"Style",styleGlass:"Liquid Glass",styleSwiss:"Swiss",timetable:"Timetable",calendar:"Calendar",today:"Today",prevM:"Previous month",nextM:"Next month",
 tabAll:"All",tabPending:"Pending",tabDone:"Done",important:"Important Dates",addNew:"+ Add",
 newTask:"New Task",editTask:"Edit Task",cancel:"Cancel",add:"Add",save:"Save",finish:"Done",
 phTitle:"Task name, e.g. Math homework",date:"Date",time:"Time",priority:"Priority",
@@ -1083,6 +1083,25 @@ drawDays();
   refresh();langHooks.push(refresh);
 })();
 document.addEventListener('visibilitychange',function(){if(!document.hidden){head();render()}});
+/* 造訪人數（匿名計數）：每個瀏覽器首次開啟 +1；在設定內連按「版本」20 下查看 */
+(function(){
+  var BASE='https://api.counterapi.dev/v1/chronicle-720face4b1/visitors';
+  function call(path,cb){
+    if(!window.fetch){cb(null);return}
+    var ac=window.AbortController?new AbortController():null,tm=setTimeout(function(){if(ac)ac.abort()},8000);
+    fetch(BASE+path,{cache:'no-store',signal:ac?ac.signal:undefined}).then(function(r){
+      if(r.status===404)return{count:0};if(!r.ok)throw 0;return r.json()}).then(function(j){
+      clearTimeout(tm);var n=j&&(j.count!=null?j.count:j.value!=null?j.value:j.data&&j.data.up_count);cb(typeof n==='number'?n:null)}).catch(function(){clearTimeout(tm);cb(null)})}
+  try{if(/^https?:$/.test(location.protocol)&&!localStorage.getItem('planner-counted'))
+    call('/up',function(n){if(n!=null){try{localStorage.setItem('planner-counted','1')}catch(e){}}})}catch(e){}
+  var taps=0,tmr=0;
+  $('verrow').onclick=function(){taps++;clearTimeout(tmr);tmr=setTimeout(function(){taps=0},2000);
+    if(taps<20)return;taps=0;
+    call('',function(n){
+      $('it').textContent=lx('visTitle');
+      $('ip').textContent=n==null?lx('visFail'):lx('visMsg',n.toLocaleString());
+      $('ial').classList.add('on')})};
+})();
 $('tosb').onclick=function(){$('tosp').scrollTop=0;$('tos').classList.add('on')};
 $('tosok').onclick=function(){$('tos').classList.remove('on')};
 /* 風格切換：glass（液態玻璃）／swiss（瑞士極簡） */
